@@ -4,6 +4,8 @@ import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray # Para receber o Goal simples do Unity
+# ADICIONE ESTA LINHA:
+from robotiq_2f_gripper_control.msg import Robotiq2FGripper_robot_output
 
 
 # NOVO: Importa a classe de cálculo de trajetória (Assumindo arquivo trajectory_generator.py)
@@ -26,8 +28,8 @@ latest_joint_state = None # Armazena a última pose de teleoperação conhecida 
 rospy.init_node('unity_joint_publisher_node')
 
 # Publisher para o controlador de trajetória do UR5 e da garra
-pub_ur5 = rospy.Publisher('/ur5/eff_joint_traj_controller/command', JointTrajectory, queue_size=10)
-pub_gripper = rospy.Publisher('/ur5/gripper_controller/command', JointTrajectory, queue_size=10)
+pub_ur5 = rospy.Publisher('/scaled_pos_joint_traj_controller/command', JointTrajectory, queue_size=10)
+pub_gripper = rospy.Publisher('/Robotiq2FGripperRobotOutput', Robotiq2FGripper_robot_output, queue_size=10)
 # NOVO: Publisher para enviar os pontos da trajetória para o Unity
 pub_unity_traj = rospy.Publisher('/reset_trajectory_points', JointTrajectory, queue_size=1)
 
@@ -56,13 +58,18 @@ def unity_joint_state_callback(data):
     pub_ur5.publish(ur5_command)
 
     # 2. Envia o comando da Garra (1 junta)
-    gripper_command = JointTrajectory()
-    gripper_command.joint_names = [GRIPPER_JOINT_NAME]
-    point_gripper = JointTrajectoryPoint()
-    point_gripper.positions = data.position[6:]
-    point_gripper.time_from_start = rospy.Duration(0.1)
-    gripper_command.points.append(point_gripper)
-    pub_gripper.publish(gripper_command)
+    gripper_val = data.position[6]
+    # Mapeia a abertura simulada (0.0 a 0.8) para o padrão real da Robotiq (0 a 255)
+    rpr_val = int(max(0, min(255, (gripper_val / 0.8) * 255.0)))
+    
+    gripper_msg = Robotiq2FGripper_robot_output()
+    gripper_msg.rACT = 1
+    gripper_msg.rGTO = 1
+    gripper_msg.rATR = 0
+    gripper_msg.rPR = rpr_val
+    gripper_msg.rSP = 150
+    gripper_msg.rFR = 150
+    pub_gripper.publish(gripper_msg)
 
     # 3. Atualiza o estado atual para o Reset (CRUCIAL!)
     latest_joint_state = data 
@@ -107,8 +114,19 @@ def reset_pose_callback(data):
         gripper_command.points.append(point_gripper)
         
     # 3. Publica ambas as trajetórias (Movimento Suave)
+    target_gripper_val = final_pose[6]
+    rpr_val = int(max(0, min(255, (target_gripper_val / 0.8) * 255.0)))
+    
+    gripper_msg = Robotiq2FGripper_robot_output()
+    gripper_msg.rACT = 1
+    gripper_msg.rGTO = 1
+    gripper_msg.rATR = 0
+    gripper_msg.rPR = rpr_val
+    gripper_msg.rSP = 150
+    gripper_msg.rFR = 150
+    
     pub_ur5.publish(ur5_command)
-    pub_gripper.publish(gripper_command)
+    pub_gripper.publish(gripper_msg)
     rospy.loginfo(f"Trajetória suave ({RESET_TIME_SECONDS}s) enviada para o controlador.")
 
     # 4. Publicar a trajetória suave para o Unity para espelhamento

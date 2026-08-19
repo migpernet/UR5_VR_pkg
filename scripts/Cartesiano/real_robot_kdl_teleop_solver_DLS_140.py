@@ -41,8 +41,8 @@ class KDLTeleopSolver:
     BASE_LINK = 'base_link'
     EE_LINK = 'tool0'
     POSE_TOPIC = 'unity/target_pose'
-    COMMAND_TOPIC = '/ur5/eff_joint_traj_controller/command'
-    JOINT_STATES_TOPIC = '/ur5/joint_states'
+    COMMAND_TOPIC = '/scaled_pos_joint_traj_controller/command'
+    JOINT_STATES_TOPIC = '/joint_states'
     
     JOINT_NAMES = [
         'shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',

@@ -2,14 +2,15 @@
 # Arquivo: robot_commander_node_140.py
 import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from robotiq_2f_gripper_control.msg import Robotiq2FGripper_robot_output # NOVO
 
 class RobotCommanderNode:
     def __init__(self):
         rospy.init_node('robot_commander_node')
 
-        # Tópicos de Saída (Direto para o Gazebo)
-        self.arm_pub = rospy.Publisher('/ur5/eff_joint_traj_controller/command', JointTrajectory, queue_size=1)
-        self.gripper_pub = rospy.Publisher('/ur5/gripper_controller/command', JointTrajectory, queue_size=1)
+        # Tópicos de Saída
+        self.arm_pub = rospy.Publisher('/scaled_pos_joint_traj_controller/command', JointTrajectory, queue_size=1)
+        self.gripper_pub = rospy.Publisher('/Robotiq2FGripperRobotOutput', Robotiq2FGripper_robot_output, queue_size=1)
 
         # Tópico de Entrada (Vindo do Planejador Matemático)
         rospy.Subscriber('/ur5/planned_trajectory', JointTrajectory, self.trajectory_callback)
@@ -60,14 +61,19 @@ class RobotCommanderNode:
                 
             arm_msg.points.append(arm_point)
 
-        # --- 2. ROTEAMENTO DA GARRA (Apenas o destino final) ---
-        # A garra não precisa de uma curva quíntupla suave, ela só precisa saber se abre ou fecha.
-        # Então pegamos apenas o último ponto da trajetória gerada.
+        # --- 2. ROTEAMENTO DA GARRA (Convertendo para Hardware Físico) ---
         final_point = msg.points[-1]
-        gripper_point = JointTrajectoryPoint()
-        gripper_point.time_from_start = rospy.Duration(1.0) # Tempo de acionamento da garra
-        gripper_point.positions = [final_point.positions[gripper_index]]
-        gripper_msg.points.append(gripper_point)
+        gripper_val = final_point.positions[gripper_index]
+        rpr_val = int(max(0, min(255, (gripper_val / 0.8) * 255.0)))
+
+        gripper_msg = Robotiq2FGripper_robot_output()
+        gripper_msg.rACT = 1
+        gripper_msg.rGTO = 1
+        gripper_msg.rATR = 0
+        gripper_msg.rPR = rpr_val
+        gripper_msg.rSP = 150
+        gripper_msg.rFR = 150
+
 
         # --- 3. EXECUÇÃO ---
         self.arm_pub.publish(arm_msg)

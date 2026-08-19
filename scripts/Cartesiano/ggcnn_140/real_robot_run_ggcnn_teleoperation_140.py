@@ -49,10 +49,12 @@ class ggcnn_grasping(object):
 
         self.crop_size = rospy.get_param("/GGCNN/crop_size", 300)
         self.FOV = rospy.get_param("/GGCNN/FOV", 60)
-        self.camera_topic_info = rospy.get_param("/GGCNN/camera_topic_info", "/camera/depth/camera_info")
+        
+        # AJUSTAR OS TÓPICOS PADRÕES PARA A REALSENSE FÍSICA
+        self.camera_topic_info = rospy.get_param("/GGCNN/camera_topic_info", "/camera/aligned_depth_to_color/camera_info")
         
         if self.args.real:
-            self.camera_topic = rospy.get_param("/GGCNN/camera_topic_realsense", "/camera/depth/image_raw")
+            self.camera_topic = rospy.get_param("/GGCNN/camera_topic_realsense", "/camera/aligned_depth_to_color/image_raw")
         else:
             self.camera_topic = rospy.get_param("/GGCNN/camera_topic", "/camera/depth/image_raw")
 

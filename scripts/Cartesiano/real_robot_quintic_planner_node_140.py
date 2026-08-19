@@ -15,7 +15,7 @@ class QuinticPlannerNode:
         
         # Ouve o Unity e o estado atual do Gazebo
         rospy.Subscriber('/unity/target_joints', JointState, self.target_callback)
-        rospy.Subscriber('/ur5/joint_states', JointState, self.current_state_callback)
+        rospy.Subscriber('/joint_states', JointState, self.current_state_callback)
         
         # Publica a trajetória planejada (O Comandante vai ler isso depois)
         self.traj_pub = rospy.Publisher('/ur5/planned_trajectory', JointTrajectory, queue_size=1)

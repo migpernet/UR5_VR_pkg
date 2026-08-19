@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# trajectory_generator.py
+# Arquivo: trajectory_generator_140.py
 import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
