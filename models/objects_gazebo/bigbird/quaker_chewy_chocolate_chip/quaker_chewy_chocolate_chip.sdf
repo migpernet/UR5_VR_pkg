@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="quaker_chewy_chocolate_chip">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.010147714173093632 -0.008417057088189246 0.08488564853730658 -3.1149743842446735 -0.017914086685439264 2.8760651645428124</pose> 
+        <mass>0.11759022733283499</mass>
+        <inertia>
+          <ixx>0.00047427344826689744</ixx>
+          <ixy>3.1773772335347774e-20</ixy>
+          <ixz>4.059972314233661e-21</ixz>
+          <iyy>0.0002811187668850826</iyy>
+          <iyz>-2.789209008875009e-22</iyz>
+          <izz>0.00023779823403692133</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///quaker_chewy_chocolate_chip/quaker_chewy_chocolate_chip_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///quaker_chewy_chocolate_chip/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///quaker_chewy_chocolate_chip/quaker_chewy_chocolate_chip.material</uri>
+            <name>quaker_chewy_chocolate_chip</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

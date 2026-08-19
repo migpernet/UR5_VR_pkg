@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="softsoap_green">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.002711467314396058 -0.0036827102464818376 0.08050399332904928 -3.09949247557569 0.020218408768200784 2.836609239668184</pose> 
+        <mass>0.014505453508874349</mass>
+        <inertia>
+          <ixx>1.394094233883161e-05</ixx>
+          <ixy>1.4780703444070653e-21</ixy>
+          <ixz>1.665379690660459e-22</ixz>
+          <iyy>1.294847885120882e-05</iyy>
+          <iyz>2.606384954574543e-22</iyz>
+          <izz>3.604306729422134e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///softsoap_green/softsoap_green_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///softsoap_green/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///softsoap_green/softsoap_green.material</uri>
+            <name>softsoap_green</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

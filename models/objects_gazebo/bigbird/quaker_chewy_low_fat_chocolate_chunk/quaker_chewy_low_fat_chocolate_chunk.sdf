@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="quaker_chewy_low_fat_chocolate_chunk">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.01214034802293339 0.0022901427494382734 0.08479257320037943 -3.130964782837075 -0.04282286367825997 -2.374387564098205</pose> 
+        <mass>0.11747849460370578</mass>
+        <inertia>
+          <ixx>0.00047347649704630176</ixx>
+          <ixy>8.754157848433264e-20</ixy>
+          <ixz>-1.0163734347903486e-21</ixz>
+          <iyy>0.0002793074993766102</iyy>
+          <iyz>3.662681828873397e-21</iyz>
+          <izz>0.00023885037438419688</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///quaker_chewy_low_fat_chocolate_chunk/quaker_chewy_low_fat_chocolate_chunk_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///quaker_chewy_low_fat_chocolate_chunk/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///quaker_chewy_low_fat_chocolate_chunk/quaker_chewy_low_fat_chocolate_chunk.material</uri>
+            <name>quaker_chewy_low_fat_chocolate_chunk</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

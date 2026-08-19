@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="cup_noodles_shrimp_picante">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.0015255065745367283 0.014824257409885484 0.058821366589364404 3.125588196058364 0.00391198328729422 2.9907750626805987</pose> 
+        <mass>0.0874628077856238</mass>
+        <inertia>
+          <ixx>0.000143876253874537</ixx>
+          <ixy>1.3172482177872741e-21</ixy>
+          <ixz>-1.2689140461277715e-22</ixz>
+          <iyy>0.00013275138816560542</iyy>
+          <iyz>-1.5684143775965147e-21</iyz>
+          <izz>0.00012090542939190648</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///cup_noodles_shrimp_picante/cup_noodles_shrimp_picante_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///cup_noodles_shrimp_picante/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///cup_noodles_shrimp_picante/cup_noodles_shrimp_picante.material</uri>
+            <name>cup_noodles_shrimp_picante</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

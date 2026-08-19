@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="red_bull">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.0013892354890806442 0.0006233133166435512 0.06641107988945733 3.138145834431202 0.006412367514259514 -1.411111071437287</pose> 
+        <mass>0.033205811875116335</mass>
+        <inertia>
+          <ixx>5.137558547532297e-05</ixx>
+          <ixy>1.303986701467976e-22</ixy>
+          <ixz>-7.800371592083912e-21</ixz>
+          <iyy>5.097988164369363e-05</iyy>
+          <iyz>1.5913859211046028e-21</iyz>
+          <izz>1.3829311967712618e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///red_bull/red_bull_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///red_bull/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///red_bull/red_bull.material</uri>
+            <name>red_bull</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

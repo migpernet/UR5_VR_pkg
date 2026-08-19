@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="clif_zbar_chocolate_brownie">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.00816435374772054 -0.0032441273944798636 0.06914272494631386 1.565197535217275 0.02646251857196709 -2.519312383899764</pose> 
+        <mass>0.10491604844704044</mass>
+        <inertia>
+          <ixx>0.0003921390154113548</ixx>
+          <ixy>-9.651553261364566e-22</ixy>
+          <ixz>-5.950640219864238e-20</ixz>
+          <iyy>0.0002622464763338321</iyy>
+          <iyz>9.717087230101276e-24</iyz>
+          <izz>0.00016895977043143636</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///clif_zbar_chocolate_brownie/clif_zbar_chocolate_brownie_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///clif_zbar_chocolate_brownie/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///clif_zbar_chocolate_brownie/clif_zbar_chocolate_brownie.material</uri>
+            <name>clif_zbar_chocolate_brownie</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

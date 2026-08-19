@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="zilla_night_black_heat">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0008250206356628774 0.0003544991232443884 0.07519274598640509 -0.0785102185419288 0.008223136189412747 -1.8344681116226635</pose> 
+        <mass>0.08225231795634502</mass>
+        <inertia>
+          <ixx>0.0001824562239091253</ixx>
+          <ixy>1.3487541594776243e-20</ixy>
+          <ixz>-3.96326951410202e-20</ixz>
+          <iyy>0.00017896905148977388</iyy>
+          <iyz>2.1248704655422567e-22</iyz>
+          <izz>7.705838384964179e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///zilla_night_black_heat/zilla_night_black_heat_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///zilla_night_black_heat/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///zilla_night_black_heat/zilla_night_black_heat.material</uri>
+            <name>zilla_night_black_heat</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

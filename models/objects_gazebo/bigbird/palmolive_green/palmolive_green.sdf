@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="palmolive_green">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.004413640316586356 -0.009642288510061457 0.09853400258237863 3.1407068719229385 0.04130416994326416 2.652894415754196</pose> 
+        <mass>0.0206418597836205</mass>
+        <inertia>
+          <ixx>3.511366149426145e-05</ixx>
+          <ixy>6.739309602722485e-21</ixy>
+          <ixz>-3.50043146415114e-21</ixz>
+          <iyy>3.4962380781548594e-05</iyy>
+          <iyz>-2.9876056108936067e-21</iyz>
+          <izz>4.843524286543765e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///palmolive_green/palmolive_green_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///palmolive_green/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///palmolive_green/palmolive_green.material</uri>
+            <name>palmolive_green</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

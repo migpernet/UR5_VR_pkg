@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="dove_beauty_cream_bar">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.007085594665026284 0.00246064879168935 0.03621086765671125 1.5751566441263336 -0.033061245750637965 -2.6305256791917127</pose> 
+        <mass>0.02765438820367893</mass>
+        <inertia>
+          <ixx>3.161639642584227e-05</ixx>
+          <ixy>-7.068491439958428e-23</ixy>
+          <ixz>-6.203586217437597e-23</ixz>
+          <iyy>2.6702661366076582e-05</iyy>
+          <iyz>-4.3631022330531066e-23</iyz>
+          <izz>1.3580578408594989e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///dove_beauty_cream_bar/dove_beauty_cream_bar_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///dove_beauty_cream_bar/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///dove_beauty_cream_bar/dove_beauty_cream_bar.material</uri>
+            <name>dove_beauty_cream_bar</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nature_valley_sweet_and_salty_nut_peanut">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.013891106173537358 -0.005410695368069913 0.07237178647815644 1.5136473983151453 -0.008882841609167648 -2.4348037203143678</pose> 
+        <mass>0.10569715117657806</mass>
+        <inertia>
+          <ixx>0.00037132692085824415</ixx>
+          <ixy>-2.892065923885909e-21</ixy>
+          <ixz>5.959487699167158e-20</ixz>
+          <iyy>0.00022978060172606637</iyy>
+          <iyz>-2.89343303312574e-22</iyz>
+          <izz>0.00018473385000554053</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nature_valley_sweet_and_salty_nut_peanut/nature_valley_sweet_and_salty_nut_peanut_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nature_valley_sweet_and_salty_nut_peanut/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nature_valley_sweet_and_salty_nut_peanut/nature_valley_sweet_and_salty_nut_peanut.material</uri>
+            <name>nature_valley_sweet_and_salty_nut_peanut</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

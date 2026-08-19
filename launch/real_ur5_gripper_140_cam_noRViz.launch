@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ==================================================================== -->
+    <!-- ARGUMENTOS CONFIGURÁVEIS (Ajuste o IP do seu robô real aqui)         -->
+    <!-- ==================================================================== -->
+    <arg name="robot_ip" default="192.168.1.10" />
+    <!-- Usa o $(find ...) para achar a calibração na pasta correta do pacote -->
+    <arg name="kinematics_config" default="$(find UR5_VR_pkg)/config/calibracao_ur5.yaml" />
+
+    <!-- ==================================================================== -->
+    <!-- DESCRIÇÃO DO ROBÓ REAL (XACRO + Arquivo de Calibração Interna)       -->
+    <!-- ==================================================================== -->
+    <param name="robot_description" command="$(find xacro)/xacro $(find UR5_VR_pkg)/urdf/ur5_gripper_140_cam.xacro kinematics_config:=$(arg kinematics_config)" />
+
+    <!-- ==================================================================== -->
+    <!-- DRIVER OFICIAL DO HARDWARE REAL (Substitui o mundo Gazebo)           -->
+    <!-- ==================================================================== -->
+    <include file="$(find ur_robot_driver)/launch/ur5_bringup.launch">
+        <arg name="robot_ip" value="$(arg robot_ip)" />
+        <arg name="kinematics_config" value="$(arg kinematics_config)" />
+    </include>
+
+    <!-- NOTA: O driver real já gerencia os tópicos /joint_states e os controladores de trajetória de forma nativa -->
+
+    <!-- ==================================================================== -->
+    <!-- PIPELINE DE VISÃO: ALTA DENSIDADE, BAIXO PESO (Inalterado)           -->
+    <!-- ==================================================================== -->
+
+    <!-- PASSO 1: VoxelGrid (Converte para Global e aplica densidade fina) -->
+    <node pkg="nodelet" type="nodelet" name="voxel_grid_filter" args="standalone pcl/VoxelGrid" output="screen">
+        <remap from="~input" to="/camera/depth/color/points" />
+        <remap from="~output" to="/points_voxelized_temp" /> <!-- Tópico temporário interno -->
+        
+        <param name="leaf_size" value="0.005" /> <!-- Sua densidade hiper-realista -->
+        <param name="output_frame" value="base_link" /> <!-- Âncora na base -->
+    </node>
+
+    <!-- PASSO 2: PassThrough Filter (A Guilhotina: Remove a Mesa e o Teto) -->
+    <node pkg="nodelet" type="nodelet" name="passthrough_z" args="standalone pcl/PassThrough" output="screen">
+        <remap from="~input" to="/points_voxelized_temp" />
+        <remap from="~output" to="/points_fixed_to_base" /> <!-- Este é o que vai para o Unity! -->
+        
+        <param name="filter_field_name" value="z" /> <!-- Cortaremos no Eixo Z (Altura) -->
+        <param name="filter_limit_min" value="0.005" /> <!-- Remove tudo abaixo de 1cm (A Mesa) -->
+        <param name="filter_limit_max" value="0.40" /> <!-- Remove tudo acima de 40cm (Teto) -->
+        <param name="filter_limit_negative" value="false" />
+    </node>
+
+    <!-- ==================================================================== -->
+    <!-- INTERFACE DE MOVIMENTO (MoveIt integrado ao Hardware Real)           -->
+    <!-- ==================================================================== -->
+    
+    <include file="$(find ur_gripper_140_moveit_config)/launch/planning_context.launch" >
+        <arg name="load_robot_description" value="false" />
+    </include>
+
+    <include file="$(find ur_gripper_140_moveit_config)/launch/move_group.launch" >
+        <arg name="publish_monitored_planning_scene" value="true" />
+    </include>
+    
+    <!-- RViz mantido comentado conforme o seu script original para poupar processamento -->
+    <!--	
+    <include file="$(find ur_gripper_140_moveit_config)/launch/moveit_rviz.launch" >
+        <arg name="rviz_config" value="$(find ur_gripper_140_moveit_config)/launch/moveit.rviz" />
+    </include>
+    -->
+    
+</launch>
+

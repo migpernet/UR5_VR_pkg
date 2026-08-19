@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="vo5_extra_body_volumizing_shampoo">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.005179706002202745 0.0013918257430987875 0.09957125314714728 3.140866114716509 0.013845699129866641 -0.021885322421853596</pose> 
+        <mass>0.04358179070832016</mass>
+        <inertia>
+          <ixx>0.00014549432331922648</ixx>
+          <ixy>8.749856025300839e-21</ixy>
+          <ixz>-1.1436944243915769e-21</ixz>
+          <iyy>0.0001381295334792137</iyy>
+          <iyz>1.3722846040584814e-20</iyz>
+          <izz>1.7233222557536195e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///vo5_extra_body_volumizing_shampoo/vo5_extra_body_volumizing_shampoo_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///vo5_extra_body_volumizing_shampoo/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///vo5_extra_body_volumizing_shampoo/vo5_extra_body_volumizing_shampoo.material</uri>
+            <name>vo5_extra_body_volumizing_shampoo</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="listerine_green">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.007153088569906357 -0.00679443183697797 0.14438646368389196 -3.109726246268593 0.015419105071652393 2.8264508988864594</pose> 
+        <mass>0.08495032704467784</mass>
+        <inertia>
+          <ixx>0.0002873832642874992</ixx>
+          <ixy>-1.1739764281861223e-20</ixy>
+          <ixz>-2.000840507446852e-21</ixz>
+          <iyy>0.0002618601199784802</iyy>
+          <iyz>-3.078138320085333e-21</iyz>
+          <izz>6.604428543541794e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///listerine_green/listerine_green_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///listerine_green/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///listerine_green/listerine_green.material</uri>
+            <name>listerine_green</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

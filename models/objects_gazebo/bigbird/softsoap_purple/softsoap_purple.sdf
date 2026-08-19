@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="softsoap_purple">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0028503212308819666 -0.004021206538439278 0.08325539543013778 3.053143777620007 0.016660519724256525 -0.22449881366531257</pose> 
+        <mass>0.014685670920835734</mass>
+        <inertia>
+          <ixx>1.3842468538992678e-05</ixx>
+          <ixy>-3.495753554751356e-22</ixy>
+          <ixz>-4.6390558712998364e-23</ixz>
+          <iyy>1.2726109770968248e-05</iyy>
+          <iyz>-2.126178110128311e-21</iyz>
+          <izz>3.7492845138617682e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///softsoap_purple/softsoap_purple_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///softsoap_purple/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///softsoap_purple/softsoap_purple.material</uri>
+            <name>softsoap_purple</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

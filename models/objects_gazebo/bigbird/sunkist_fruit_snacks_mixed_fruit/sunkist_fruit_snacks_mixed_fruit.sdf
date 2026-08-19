@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="sunkist_fruit_snacks_mixed_fruit">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.012707241908291431 0.008493423830273888 0.09413065934663982 -3.139623359734552 0.0015123422590683658 -2.537163525772487</pose> 
+        <mass>0.1550531794213211</mass>
+        <inertia>
+          <ixx>0.0007148026824433821</ixx>
+          <ixy>6.084437525052166e-20</ixy>
+          <ixz>-8.596480474000057e-22</ixz>
+          <iyy>0.00046088146523096075</iyy>
+          <iyz>1.5163917543653584e-21</iyz>
+          <izz>0.00033448157523593313</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///sunkist_fruit_snacks_mixed_fruit/sunkist_fruit_snacks_mixed_fruit_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///sunkist_fruit_snacks_mixed_fruit/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///sunkist_fruit_snacks_mixed_fruit/sunkist_fruit_snacks_mixed_fruit.material</uri>
+            <name>sunkist_fruit_snacks_mixed_fruit</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="white_rain_sensations_apple_blossom_hydrating_body_wash">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.00862925294933578 -0.0070691703495027215 0.10736031143443873 -3.1415414893108156 0.014932176266923456 -0.024855858226806225</pose> 
+        <mass>0.05757971492108156</mass>
+        <inertia>
+          <ixx>0.00023316808172818885</ixx>
+          <ixy>-2.7824908010310186e-21</ixy>
+          <ixz>1.3780567984920827e-21</ixz>
+          <iyy>0.0002202606775281193</iyy>
+          <iyz>1.063692348141233e-19</iyz>
+          <izz>2.797709790488799e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///white_rain_sensations_apple_blossom_hydrating_body_wash/white_rain_sensations_apple_blossom_hydrating_body_wash_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///white_rain_sensations_apple_blossom_hydrating_body_wash/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///white_rain_sensations_apple_blossom_hydrating_body_wash/white_rain_sensations_apple_blossom_hydrating_body_wash.material</uri>
+            <name>white_rain_sensations_apple_blossom_hydrating_body_wash</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

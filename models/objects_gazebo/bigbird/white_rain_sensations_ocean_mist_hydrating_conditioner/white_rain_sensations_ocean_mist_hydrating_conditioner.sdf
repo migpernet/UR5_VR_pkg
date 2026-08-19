@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="white_rain_sensations_ocean_mist_hydrating_conditioner">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.003768806733128963 -0.0049041806415245056 0.10439461267852092 3.13961111530257 0.01209803447414782 -0.0036754607780346915</pose> 
+        <mass>0.06175602806274389</mass>
+        <inertia>
+          <ixx>0.00024859117009384997</ixx>
+          <ixy>1.0081378159031405e-21</ixy>
+          <ixz>2.0272481564754843e-21</ixz>
+          <iyy>0.00023366899637320524</iyy>
+          <iyz>5.783116946006955e-21</iyz>
+          <izz>3.263574045949132e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///white_rain_sensations_ocean_mist_hydrating_conditioner/white_rain_sensations_ocean_mist_hydrating_conditioner_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///white_rain_sensations_ocean_mist_hydrating_conditioner/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///white_rain_sensations_ocean_mist_hydrating_conditioner/white_rain_sensations_ocean_mist_hydrating_conditioner.material</uri>
+            <name>white_rain_sensations_ocean_mist_hydrating_conditioner</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

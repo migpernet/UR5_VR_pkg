@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="Part1">
+    <static>0</static>
+    <allow_auto_disable>1</allow_auto_disable>
+    <gravity>1</gravity>
+    <link name="part1_link">
+     
+
+	<collision name='collision_base'>
+	  <pose>0 0 0 0 0 0</pose> 
+	  <geometry>
+	    <cylinder>
+	      <radius>0.016</radius> <length>0.001</length> 
+	    </cylinder>
+	  </geometry>
+	  <surface>
+	    <contact>
+	      <ode>
+		<kp>1e+13</kp>
+		<kd>1.0</kd>
+		<min_depth>0.001</min_depth>
+	      </ode>
+	    </contact>
+	  </surface>
+	</collision>
+	
+	
+	
+	
+	
+
+      <collision name="collision">
+      <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://part1/meshes/part1.dae</uri>
+            <scale>1.13 1.13 1.43</scale>
+          </mesh>
+        </geometry>
+      </collision>
+	
+
+      <visual name="visual">
+      <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://part1/meshes/part1.dae</uri>
+            <scale>1.1 1.1 1.4</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

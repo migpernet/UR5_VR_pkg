@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="quaker_chewy_peanut_butter_chocolate_chip">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.01512425341935378 -0.00035915337585109663 0.08462166209639507 3.116275471734388 -0.013862137263907446 -2.329451554825405</pose> 
+        <mass>0.11921498606606619</mass>
+        <inertia>
+          <ixx>0.00048462027796147123</ixx>
+          <ixy>2.0871170087024702e-19</ixy>
+          <ixz>3.1646435110623374e-22</ixz>
+          <iyy>0.00028482936082357903</iyy>
+          <iyz>7.69291865533308e-22</iyz>
+          <izz>0.00024589696879654755</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///quaker_chewy_peanut_butter_chocolate_chip/quaker_chewy_peanut_butter_chocolate_chip_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///quaker_chewy_peanut_butter_chocolate_chip/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///quaker_chewy_peanut_butter_chocolate_chip/quaker_chewy_peanut_butter_chocolate_chip.material</uri>
+            <name>quaker_chewy_peanut_butter_chocolate_chip</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

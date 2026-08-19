@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="ritz_crackers">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.017623156028097324 -0.015842579271502757 0.10069175666284243 -3.1059152056908106 0.006894784923825338 2.8029749637161387</pose> 
+        <mass>0.1841833439866736</mass>
+        <inertia>
+          <ixx>0.0009904645110744386</ixx>
+          <ixy>-5.806328503729975e-20</ixy>
+          <ixz>-1.2686269928570302e-21</ixz>
+          <iyy>0.0006293399665505688</iyy>
+          <iyz>-4.344553023163804e-21</iyz>
+          <izz>0.0004600358921808509</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///ritz_crackers/ritz_crackers_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///ritz_crackers/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///ritz_crackers/ritz_crackers.material</uri>
+            <name>ritz_crackers</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

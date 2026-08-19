@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="v8_fusion_strawberry_banana">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.00408331003523821 0.005552669570922128 0.061012164762664876 3.1317043469385024 0.0022823012256425763 2.1693583861517873</pose> 
+        <mass>0.04393019921544323</mass>
+        <inertia>
+          <ixx>5.844787992077311e-05</ixx>
+          <ixy>5.746013380051307e-21</ixy>
+          <ixz>4.334317705837137e-21</ixz>
+          <iyy>5.78916591594469e-05</iyy>
+          <iyz>3.8331648381317594e-21</iyz>
+          <izz>2.7385218269239616e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///v8_fusion_strawberry_banana/v8_fusion_strawberry_banana_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///v8_fusion_strawberry_banana/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///v8_fusion_strawberry_banana/v8_fusion_strawberry_banana.material</uri>
+            <name>v8_fusion_strawberry_banana</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

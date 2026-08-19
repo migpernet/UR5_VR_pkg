@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="blue_clover_baby_toy">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.000654941827993025 0.0003612306376671068 0.02381165125271105 0.5907280374954283 -1.3353394194185315 -0.045535558049724104</pose> 
+        <mass>0.0059535089510752166</mass>
+        <inertia>
+          <ixx>1.5583555884221265e-06</ixx>
+          <ixy>5.429700545692742e-23</ixy>
+          <ixz>-1.7746151111108013e-22</ixz>
+          <iyy>1.48340348639038e-06</iyy>
+          <iyz>4.731762475570893e-23</iyz>
+          <izz>1.375778730854735e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///blue_clover_baby_toy/blue_clover_baby_toy_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///blue_clover_baby_toy/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///blue_clover_baby_toy/blue_clover_baby_toy.material</uri>
+            <name>blue_clover_baby_toy</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

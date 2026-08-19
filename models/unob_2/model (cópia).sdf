@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="unob_2">
+    <static>1</static>
+
+    <link name="unob_2_link">
+      <pose>0 0 0 0 0 0</pose>
+
+      <!-- 🔹 INERTIAL -->
+      <inertial>
+        <mass>0.2</mass>
+        <inertia>
+          <ixx>1e-4</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-4</iyy>
+          <iyz>0</iyz>
+          <izz>1e-4</izz>
+        </inertia>
+      </inertial>
+
+      <!-- 🔹 COLLISION -->
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://unob_2/meshes/unob_2.dae</uri>
+            <scale>0.7 0.7 0.7</scale>
+          </mesh>
+        </geometry>
+
+        <!-- 🔹 FÍSICA -->
+        <surface>
+          <friction>
+            <ode>
+              <mu>1.0</mu>
+              <mu2>1.0</mu2>
+            </ode>
+          </friction>
+
+          <contact>
+            <ode>
+              <kp>1e+13</kp>
+              <kd>5</kd>
+              <min_depth>0.003</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+          </bounce>
+        </surface>
+      </collision>
+
+      <!-- 🔹 VISUAL -->
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://unob_2/meshes/unob_2.dae</uri>
+            <scale>0.7 0.7 0.7</scale>
+          </mesh>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+
+      <!-- 🔹 FLAGS -->
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+
+    </link>
+
+    <allow_auto_disable>1</allow_auto_disable>
+  </model>
+</sdf>

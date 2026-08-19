@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="cinnamon_toast_crunch">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.014137660371928332 -0.011288130679600675 0.12975348614518034 -3.1266794562978264 0.0048252254943093615 -2.1239794198662207</pose> 
+        <mass>0.310196837955065</mass>
+        <inertia>
+          <ixx>0.0026662477830558255</ixx>
+          <ixy>6.101235982150085e-19</ixy>
+          <ixz>-3.809798418428654e-20</ixz>
+          <iyy>0.001768172057711773</iyy>
+          <iyz>7.773639374208778e-20</iyz>
+          <izz>0.0010906885193221274</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///cinnamon_toast_crunch/cinnamon_toast_crunch_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///cinnamon_toast_crunch/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///cinnamon_toast_crunch/cinnamon_toast_crunch.material</uri>
+            <name>cinnamon_toast_crunch</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

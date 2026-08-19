@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="honey_bunches_of_oats_with_almonds">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.021325693066267127 0.0011186991521898255 0.13590539432324025 3.139950547849213 -0.008115118364170068 -2.1283787780414682</pose> 
+        <mass>0.3180543463092233</mass>
+        <inertia>
+          <ixx>0.0028546532230984737</ixx>
+          <ixy>9.310519443525841e-20</ixy>
+          <ixz>9.590397339501328e-22</ixz>
+          <iyy>0.0019871814902018966</iyy>
+          <iyz>6.1541760540740165e-21</iyz>
+          <izz>0.0010650532801709173</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///honey_bunches_of_oats_with_almonds/honey_bunches_of_oats_with_almonds_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///honey_bunches_of_oats_with_almonds/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///honey_bunches_of_oats_with_almonds/honey_bunches_of_oats_with_almonds.material</uri>
+            <name>honey_bunches_of_oats_with_almonds</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

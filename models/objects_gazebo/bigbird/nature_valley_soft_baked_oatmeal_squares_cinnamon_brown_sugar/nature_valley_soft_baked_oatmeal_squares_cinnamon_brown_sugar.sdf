@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.001215313005341148 0.004780605192775516 0.07312292431572234 1.6160646066660989 -0.0020589271575675245 -2.2309821733576918</pose> 
+        <mass>0.144325430000697</mass>
+        <inertia>
+          <ixx>0.0004734264500768032</ixx>
+          <ixy>1.3812970892009034e-21</ixy>
+          <ixz>1.7450647964591478e-20</ixz>
+          <iyy>0.0003114722105185634</iyy>
+          <iyz>-2.69765264028784e-21</iyz>
+          <izz>0.00028739088889871196</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar/nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar/nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar.material</uri>
+            <name>nature_valley_soft_baked_oatmeal_squares_cinnamon_brown_sugar</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

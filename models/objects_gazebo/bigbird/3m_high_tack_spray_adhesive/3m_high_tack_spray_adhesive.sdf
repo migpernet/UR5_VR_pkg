@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="3m_high_tack_spray_adhesive">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.005578393779209325 -0.006010697382859226 0.11096618371292802 0.005177118940836479 -0.00339817488084801 2.694095215471124</pose> 
+        <mass>0.10653573521491269</mass>
+        <inertia>
+          <ixx>0.0004794091376281353</ixx>
+          <ixy>-3.0725032855195195e-20</ixy>
+          <ixz>2.2001780192508405e-20</ixz>
+          <iyy>0.00047875851408435996</iyy>
+          <iyz>-2.025660284224868e-20</iyz>
+          <izz>8.116741445866548e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///3m_high_tack_spray_adhesive/3m_high_tack_spray_adhesive_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///3m_high_tack_spray_adhesive/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///3m_high_tack_spray_adhesive/3m_high_tack_spray_adhesive.material</uri>
+            <name>3m_high_tack_spray_adhesive</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

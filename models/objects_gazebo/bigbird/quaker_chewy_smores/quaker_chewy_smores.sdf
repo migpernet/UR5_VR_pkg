@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="quaker_chewy_smores">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.004716973733212433 -0.0037978613001486243 0.08389887687279007 -3.113921178918828 -0.03324321930188743 2.7086955225758906</pose> 
+        <mass>0.11356740495590673</mass>
+        <inertia>
+          <ixx>0.00045352274170854196</ixx>
+          <ixy>6.562501410839256e-20</ixy>
+          <ixz>4.898967704534876e-21</ixz>
+          <iyy>0.00026595140381326126</iyy>
+          <iyz>-3.71939088136775e-21</iyz>
+          <izz>0.0002286796153417918</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///quaker_chewy_smores/quaker_chewy_smores_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///quaker_chewy_smores/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///quaker_chewy_smores/quaker_chewy_smores.material</uri>
+            <name>quaker_chewy_smores</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

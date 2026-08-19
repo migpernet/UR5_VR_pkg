@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="bai5_sumatra_dragonfruit">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.0004060963814017835 -0.005312204769192774 0.0920611275885864 0.0032760083678429522 0.005947042232344615 -1.61926823178299</pose> 
+        <mass>0.06578220805355957</mass>
+        <inertia>
+          <ixx>0.00017656487861288732</ixx>
+          <ixy>-2.001137388398678e-21</ixy>
+          <ixz>-8.381849276973e-20</ixz>
+          <iyy>0.00017628050125938186</iyy>
+          <iyz>-2.7379276517082208e-21</iyz>
+          <izz>4.091579083660818e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///bai5_sumatra_dragonfruit/bai5_sumatra_dragonfruit_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///bai5_sumatra_dragonfruit/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///bai5_sumatra_dragonfruit/bai5_sumatra_dragonfruit.material</uri>
+            <name>bai5_sumatra_dragonfruit</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

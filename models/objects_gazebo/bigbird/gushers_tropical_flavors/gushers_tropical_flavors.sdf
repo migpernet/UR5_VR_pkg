@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="gushers_tropical_flavors">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.007997432958996433 0.0019043659981749306 0.09330269294248969 -3.13817092282158 0.003805993029444099 -2.2513708906840977</pose> 
+        <mass>0.1285272016854804</mass>
+        <inertia>
+          <ixx>0.0005808715550113447</ixx>
+          <ixy>-3.994887770606678e-20</ixy>
+          <ixz>-1.4159507705049146e-22</ixz>
+          <iyy>0.00037294526187731135</iyy>
+          <iyz>-1.8248834864465464e-22</iyz>
+          <izz>0.00025608090212305155</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///gushers_tropical_flavors/gushers_tropical_flavors_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///gushers_tropical_flavors/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///gushers_tropical_flavors/gushers_tropical_flavors.material</uri>
+            <name>gushers_tropical_flavors</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="unob_2">
+    <static>0</static>
+    <gravity>1</gravity>
+    <allow_auto_disable>1</allow_auto_disable>
+    <link name="unob_2_link">
+
+	<collision name='collision_base'>
+	  <pose>0 0 0.001 0 0 0</pose> 
+	  <geometry>
+	    <box>
+	      <size>0.041 0.043 0.0052</size> 
+	    </box>
+	  </geometry>
+	  <surface>
+	    <contact>
+	      <ode>
+		<kp>1e+13</kp>
+		<kd>1.0</kd>
+		<min_depth>0.001</min_depth>
+	      </ode>
+	    </contact>
+	  </surface>
+	</collision>
+	
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://unob_2/meshes/unob_2.dae</uri>
+            <scale>0.72 0.72 0.72</scale>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+      <pose>0 0 0.00 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://unob_2/meshes/unob_2.dae</uri>
+            <scale>0.7 0.7 0.7</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

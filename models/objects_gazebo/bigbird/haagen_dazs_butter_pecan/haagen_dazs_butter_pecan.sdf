@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="haagen_dazs_butter_pecan">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.004573280526083763 -0.004501420807844326 0.05740725266480443 -3.1402461541005002 0.01387906453624184 -0.8701407834934775</pose> 
+        <mass>0.059883124507765846</mass>
+        <inertia>
+          <ixx>7.530818634200777e-05</ixx>
+          <ixy>-8.015670240127828e-21</ixy>
+          <ixz>-9.141382707400528e-22</ixz>
+          <iyy>7.462286116929278e-05</iyy>
+          <iyz>-1.170065563231206e-21</iyz>
+          <izz>5.9921193315015455e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///haagen_dazs_butter_pecan/haagen_dazs_butter_pecan_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///haagen_dazs_butter_pecan/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///haagen_dazs_butter_pecan/haagen_dazs_butter_pecan.material</uri>
+            <name>haagen_dazs_butter_pecan</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

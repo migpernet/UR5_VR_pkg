@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nature_valley_sweet_and_salty_nut_roasted_mix_nut">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.011964654915842232 -0.0041952578821605226 0.0724298227219639 1.531984456002199 -0.012784893675622203 -2.468226935001064</pose> 
+        <mass>0.10668686681016833</mass>
+        <inertia>
+          <ixx>0.000374671988028125</ixx>
+          <ixy>-1.6450786369002232e-21</ixy>
+          <ixz>2.6748297218919682e-20</ixz>
+          <iyy>0.0002310429046126536</iyy>
+          <iyz>4.83129799822842e-22</iyz>
+          <izz>0.0001876989917307754</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nature_valley_sweet_and_salty_nut_roasted_mix_nut/nature_valley_sweet_and_salty_nut_roasted_mix_nut_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nature_valley_sweet_and_salty_nut_roasted_mix_nut/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nature_valley_sweet_and_salty_nut_roasted_mix_nut/nature_valley_sweet_and_salty_nut_roasted_mix_nut.material</uri>
+            <name>nature_valley_sweet_and_salty_nut_roasted_mix_nut</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

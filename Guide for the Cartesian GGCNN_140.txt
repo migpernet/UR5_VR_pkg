@@ -1,0 +1,56 @@
+Guia de simulação:
+
+1 - Lançar a simulação no unity: 
+Nome do projeto --> UR5_JointControl_VR_V4    
+
+1.1 - # Entra direto na pasta de scripts do seu pacote
+roscd UR5_VR_pkg/scripts
+
+# Aplica o start automático da arquitetura
+./start_robot_real.sh
+
+2 - Lançar o servidor via terminal
+roslaunch ros_tcp_endpoint endpoint.launch
+
+3 - Lançar o gazebo / RViz via terminal
+roslaunch UR5_VR_pkg spawn_ur5_gripper_140_cam.launch      (Com Rviz)
+     ou     
+roslaunch UR5_VR_pkg spawn_ur5_gripper_140_cam_gazebo.launch      (Sem Rviz)
+
+4 - Inserir objetos no gazebo
+rosrun ggcnn_pkg spawn_objects.py       ou        rosrun trajectory_pkg spawn_objects_model.py (blocos coloridos)
+rosrun ggcnn_pkg spawn_objects_news.py
+
+5 - Rodar o script do GGCNN
+rosrun UR5_VR_pkg run_ggcnn_teleoperation_140.py
+
+5.1 - Rodar o nó responsável por ajustar o RGB para BGR
+rosrun UR5_VR_pkg fix_colors_ggcnn_140.py
+
+6 - Lançar o nó no lado do ROS para receber a pose do "GhostCube" enviadas pelo Unity e resolver a cinemática inversa com o KDL/DLS
+rosrun UR5_VR_pkg kdl_teleop_solver_DLS_140.py
+
+7 - Rode o planejador de trajetórias (Polinômio quíntuplo)
+rosrun UR5_VR_pkg quintic_planner_node_140.py
+
+8 - Rode o nó responsável pelo comando das juntas do robô
+rosrun UR5_VR_pkg robot_commander_node_140.py
+
+9 - Para fazer o teste de Latência
+rosrun UR5_VR_pkg latency_echo_140.py
+
+10 - Conectar a webCam no computador Ubuntu
+
+11 - Lançar o nó no lado do ROS para transmitir informações da webCam externa
+rosrun usb_cam usb_cam_node _video_device:="/dev/video2" _pixel_format:=yuyv 
+
+12 - Iniciar a simulação no unity apertando o "play"
+
+13 - Verificar a criação dos tópicos e publicações com "rostopic"
+
+14 - Abrir o "rqt_graph" via terminal para visualizar os nós e tópicos publisher e subscriber.
+
+15 - Comando para extrair a calibração no robô real
+roslaunch ur_calibration calibration_correction.launch robot_ip:=192.168.1.10 target_filename:=~/miguel_ws/src/UR5_VR_pkg/config/calibracao_ur5.yaml
+
+

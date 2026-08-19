@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="clif_z_bar_chocolate_chip">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0024461189181117717 0.0008263469544550956 0.0698405796335497 1.5737490724834278 -0.032735400525438635 2.9001762574108683</pose> 
+        <mass>0.10548368926478464</mass>
+        <inertia>
+          <ixx>0.0004017927551658126</ixx>
+          <ixy>4.306190306042925e-21</ixy>
+          <ixz>2.738113345162455e-20</ixz>
+          <iyy>0.00026966902067541163</iyy>
+          <iyz>2.254058962628981e-21</iyz>
+          <izz>0.00017026239132719042</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///clif_z_bar_chocolate_chip/clif_z_bar_chocolate_chip_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///clif_z_bar_chocolate_chip/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///clif_z_bar_chocolate_chip/clif_z_bar_chocolate_chip.material</uri>
+            <name>clif_z_bar_chocolate_chip</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

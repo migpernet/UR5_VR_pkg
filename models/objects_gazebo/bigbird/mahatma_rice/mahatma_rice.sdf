@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="mahatma_rice">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.010106772040441612 -0.008246873825287913 0.0246824137205845 0.9909117172201384 -1.5227942344089647 -2.1991336756294255</pose> 
+        <mass>0.11253534162982766</mass>
+        <inertia>
+          <ixx>0.0006019043971015445</ixx>
+          <ixy>8.221837342593766e-21</ixy>
+          <ixz>-1.1904007823945108e-20</ixz>
+          <iyy>0.00045460820634725656</iyy>
+          <iyz>3.3045989955745043e-22</iyz>
+          <izz>0.00017501517750719668</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///mahatma_rice/mahatma_rice_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///mahatma_rice/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///mahatma_rice/mahatma_rice.material</uri>
+            <name>mahatma_rice</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

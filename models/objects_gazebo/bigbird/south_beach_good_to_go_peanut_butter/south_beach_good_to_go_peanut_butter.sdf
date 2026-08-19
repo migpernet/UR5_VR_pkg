@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="south_beach_good_to_go_peanut_butter">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.011659664274973289 -0.002989423687363882 0.07252320765681852 1.608690854939555 0.009997360489407804 2.858676363103828</pose> 
+        <mass>0.10919343670729643</mass>
+        <inertia>
+          <ixx>0.00037359947912448554</ixx>
+          <ixy>7.821298101842672e-22</ixy>
+          <ixz>1.9183314992488126e-20</ixz>
+          <iyy>0.00022849070128110226</iyy>
+          <iyz>-2.639490061193099e-21</iyz>
+          <izz>0.000194862018500907</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///south_beach_good_to_go_peanut_butter/south_beach_good_to_go_peanut_butter_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///south_beach_good_to_go_peanut_butter/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///south_beach_good_to_go_peanut_butter/south_beach_good_to_go_peanut_butter.material</uri>
+            <name>south_beach_good_to_go_peanut_butter</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

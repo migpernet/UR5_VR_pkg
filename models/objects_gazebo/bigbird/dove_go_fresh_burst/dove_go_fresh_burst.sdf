@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="dove_go_fresh_burst">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.0043713787554984914 -0.0016873109492151273 0.03692548343301424 1.564650271877932 -0.012244736780114817 -0.3576451892684046</pose> 
+        <mass>0.02874398665447246</mass>
+        <inertia>
+          <ixx>3.229284104053762e-05</ixx>
+          <ixy>6.110067666819493e-23</ixy>
+          <ixz>-5.786615187228816e-22</ixz>
+          <iyy>2.7444362348075996e-05</iyy>
+          <iyz>-9.684874547432941e-24</iyz>
+          <izz>1.4560331647592548e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///dove_go_fresh_burst/dove_go_fresh_burst_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///dove_go_fresh_burst/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///dove_go_fresh_burst/dove_go_fresh_burst.material</uri>
+            <name>dove_go_fresh_burst</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

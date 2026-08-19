@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="aunt_jemima_original_syrup">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.003363500655369938 -0.010433081331012152 0.10443171996696138 3.1230943017781545 0.00040631282557202864 -2.963170748287762</pose> 
+        <mass>0.08773417526160335</mass>
+        <inertia>
+          <ixx>0.0003211113710538578</ixx>
+          <ixy>5.443998595429597e-21</ixy>
+          <ixz>1.222303880149295e-21</ixz>
+          <iyy>0.0003059168172515584</iyy>
+          <iyz>-9.525737360604509e-21</iyz>
+          <izz>6.745183429791992e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///aunt_jemima_original_syrup/aunt_jemima_original_syrup_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///aunt_jemima_original_syrup/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///aunt_jemima_original_syrup/aunt_jemima_original_syrup.material</uri>
+            <name>aunt_jemima_original_syrup</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

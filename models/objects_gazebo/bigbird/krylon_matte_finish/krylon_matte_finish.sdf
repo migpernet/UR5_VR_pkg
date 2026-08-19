@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="krylon_matte_finish">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0007259923772664866 0.003974052921071868 0.09325092246635104 0.0021436989972709037 0.0013563148462440106 0.43318120159110435</pose> 
+        <mass>0.0727164681872302</mass>
+        <inertia>
+          <ixx>0.00023944489583199914</ixx>
+          <ixy>-9.072680157140309e-21</ixy>
+          <ixz>6.279374746993481e-20</ixz>
+          <iyy>0.00023939062778167335</iyy>
+          <iyz>1.535651025253181e-19</iyz>
+          <izz>4.4614851569958934e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///krylon_matte_finish/krylon_matte_finish_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///krylon_matte_finish/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///krylon_matte_finish/krylon_matte_finish.material</uri>
+            <name>krylon_matte_finish</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

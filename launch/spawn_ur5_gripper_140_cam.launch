@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- Associate to the robot description parameter, the urdf file that model the robot-->
+    <param name="robot_description" command = "$(find xacro)/xacro $(find UR5_VR_pkg)/urdf/ur5_gripper_140_cam.xacro" />
+
+    <!-- Set teh position in empty world-->
+    <arg name="x" default="1.915492" />
+    <arg name="y" default="-1.197013" />
+    <arg name="z" default="0.871" /> 
+    <arg name="R" default="0" />
+    <arg name="P" default="0" />
+    <arg name="Y" default="1.57" /> <!-- 1.57 -->
+
+    <arg name="world_file" default="$(find lar_gazebo)src/worlds/lar.world"/>
+  
+    <!-- Launch Gezabo world in paused-->
+    <include file = "$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="use_sim_time" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="gui" value="true"/>
+        <arg name="paused" value="true" />
+        <arg name="world_name" value="$(arg world_file)"/>
+    </include> 
+
+    <!-- A mesa pode ser lançada, alternativamente, utilizando o script spawn_table.py e comentando a mesa em my_scene.world -->
+    <!-- <node pkg="ggcnn_pkg" type="spawn_table.py" name="spawn_table_model"/> -->
+    
+    <!-- Spawn the robot using the package gazebo_ros-->
+    <node name="spawn_the_robot" pkg="gazebo_ros" type="spawn_model"  output="screen" 
+        args="-urdf -param robot_description -model ur5 -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+
+
+    <!-- publisher the transform tf for world and base_link of the robot -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_ur5_tf" args="$(arg x) $(arg y) $(arg z) $(arg R) $(arg P) $(arg Y) /world /base_link 100" /> -->
+
+
+
+
+    <!-- Launch the objects -->
+    <!-- <include file="$(find ggcnn_pkg)/launch/spawn_objects.launch" /> -->
+
+    <!-- Lançar spawn_table no mundo gazebo -->
+    <!-- <node pkg="ggcnn_pkg" type="spawn_objects.py" name="spawn_table_node" output="screen">      
+    </node> -->
+
+    <!-- *************************************************** -->
+    <!-- ========================================== -->
+    <!-- PIPELINE DE VISÃO: ALTA DENSIDADE, BAIXO PESO -->
+    <!-- ========================================== -->
+
+    <!-- PASSO 1: VoxelGrid (Converte para Global e aplica densidade fina) -->
+    <node pkg="nodelet" type="nodelet" name="voxel_grid_filter" args="standalone pcl/VoxelGrid" output="screen">
+        <remap from="~input" to="/camera/depth/color/points" />
+        <remap from="~output" to="/points_voxelized_temp" /> <!-- Tópico temporário interno -->
+        
+        <param name="leaf_size" value="0.005" /> <!-- Sua densidade hiper-realista: 0.02; 0.01; 0.005 e 0.002 (quanto menor, mais detalhada a nuvem)-->
+        <param name="output_frame" value="base_link" /> <!-- Âncora na base -->
+    </node>
+
+    <!-- PASSO 2: PassThrough Filter (A Guilhotina: Remove a Mesa e o Teto) -->
+    <node pkg="nodelet" type="nodelet" name="passthrough_z" args="standalone pcl/PassThrough" output="screen">
+        <remap from="~input" to="/points_voxelized_temp" />
+        <remap from="~output" to="/points_fixed_to_base" /> <!-- Este é o que vai para o Unity! -->
+        
+        <param name="filter_field_name" value="z" /> <!-- Cortaremos no Eixo Z (Altura) -->
+        <param name="filter_limit_min" value="0.005" /> <!-- Remove tudo abaixo de 1cm (A Mesa) -->
+        <param name="filter_limit_max" value="0.40" /> <!-- Remove tudo acima de 40cm (Teto/Paredes ao fundo) -->
+        <param name="filter_limit_negative" value="false" />
+    </node>
+    <!-- *************************************************** -->
+
+    <rosparam command="load" file="$(find UR5_VR_pkg)/config/ur5_gripper_140_controllers.yaml"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner"  
+            output="screen" respawn="false" ns="/ur5"
+            args="joint_state_controller
+                eff_joint_traj_controller
+                gripper_controller
+                --timeout 60 ">        
+    </node> 
+
+
+    <!-- Convert joint states to TF transform for rviz and rqt-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  
+            output="screen" respawn="false">
+            <remap from="/joint_states" to="/ur5/joint_states"/>
+    </node>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <remap from="/joint_states" to="/ur5/joint_states"/>
+    <!--wrist_3_joint_effort_controllerwrist_3_joint_effort_controller
+    <node name="rqt_reconfigure" pkg="rqt_gui" type="rqt_gui" />
+    -->
+
+    
+    <include file= "$(find ur_gripper_140_moveit_config)/launch/planning_context.launch" >
+        <arg name="load_robot_description" value="false" />
+    </include>
+
+    <include file= "$(find ur_gripper_140_moveit_config)/launch/move_group.launch" >
+        <arg name="publish_monitored_planning_scene" value="true" />
+    </include>
+
+    <include file= "$(find ur_gripper_140_moveit_config)/launch/moveit_rviz.launch" >
+        <arg name="rviz_config" value="$(find ur_gripper_140_moveit_config)/launch/moveit.rviz" />
+    </include>
+
+    
+</launch>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="paper_plate">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.009952806780824882 -0.0007016337049928145 0.014590000699496513 -1.9427441385064759 -1.5660664217362312 2.124134758560852</pose> 
+        <mass>0.04721181631708255</mass>
+        <inertia>
+          <ixx>0.0002722512254842118</ixx>
+          <ixy>-1.1088783238891514e-21</ixy>
+          <ixz>3.866494770655319e-21</ixz>
+          <iyy>0.00014096080149980132</iyy>
+          <iyz>1.692685805381237e-20</iyz>
+          <izz>0.00013259311287039345</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///paper_plate/paper_plate_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///paper_plate/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///paper_plate/paper_plate.material</uri>
+            <name>paper_plate</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

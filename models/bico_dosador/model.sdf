@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="Bico_dosador">
+    <static>0</static>
+    <gravity>1</gravity>
+    <allow_auto_disable>1</allow_auto_disable>
+    <link name="bico_dosador_link">
+    
+
+    
+      
+	<collision name='collision_base'>
+	  <pose>0 0 0 0 0 0</pose> 
+	  <geometry>
+	    <cylinder>
+	      <radius>0.0175</radius> <length>0.0013</length> 
+	    </cylinder>
+	  </geometry>
+	  <surface>
+	    <contact>
+	      <ode>
+		<kp>1e+13</kp>
+		<kd>1.0</kd>
+		<min_depth>0.001</min_depth>
+	      </ode>
+	    </contact>
+	  </surface>
+	</collision>
+	
+	
+	
+
+	
+	
+	
+      <collision name="collision">
+      <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://bico_dosador/meshes/bico_dosador.dae</uri>
+            <scale>0.81 0.81 0.81</scale>
+          </mesh>
+        </geometry>
+      </collision>
+	
+	
+
+      
+      
+      <visual name="visual">
+      <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://bico_dosador/meshes/bico_dosador.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

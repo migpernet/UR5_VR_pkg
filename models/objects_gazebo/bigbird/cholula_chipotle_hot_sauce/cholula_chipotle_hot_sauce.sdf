@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="cholula_chipotle_hot_sauce">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.00014436353098133006 0.0014185911579525617 0.07933470281575629 -3.1078580653273753 0.0223361182407063 1.3640838268773923</pose> 
+        <mass>0.02623282392945838</mass>
+        <inertia>
+          <ixx>5.971404706041841e-05</ixx>
+          <ixy>3.0102617693102685e-21</ixy>
+          <ixz>3.582045630012294e-21</ixz>
+          <iyy>5.959020047985964e-05</iyy>
+          <iyz>4.064806131175832e-22</iyz>
+          <izz>7.07357626337395e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///cholula_chipotle_hot_sauce/cholula_chipotle_hot_sauce_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///cholula_chipotle_hot_sauce/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///cholula_chipotle_hot_sauce/cholula_chipotle_hot_sauce.material</uri>
+            <name>cholula_chipotle_hot_sauce</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

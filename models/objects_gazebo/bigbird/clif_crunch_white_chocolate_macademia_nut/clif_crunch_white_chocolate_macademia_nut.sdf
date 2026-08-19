@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="clif_crunch_white_chocolate_macademia_nut">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.013065570766222109 -0.0026968554300056597 0.07489887787279072 1.5574703786760513 0.01265800758050543 -2.3611111910469815</pose> 
+        <mass>0.12054650007775884</mass>
+        <inertia>
+          <ixx>0.00046412480492953996</ixx>
+          <ixy>1.0743052893661811e-21</ixy>
+          <ixz>1.5359518234319693e-20</ixz>
+          <iyy>0.00028820831488987126</iyy>
+          <iyz>-6.106252291272276e-22</iyz>
+          <izz>0.00022979933310841324</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///clif_crunch_white_chocolate_macademia_nut/clif_crunch_white_chocolate_macademia_nut_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///clif_crunch_white_chocolate_macademia_nut/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///clif_crunch_white_chocolate_macademia_nut/clif_crunch_white_chocolate_macademia_nut.material</uri>
+            <name>clif_crunch_white_chocolate_macademia_nut</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

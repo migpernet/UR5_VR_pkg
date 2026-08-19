@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nutrigrain_harvest_blueberry_bliss">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.012939695896837237 0.002739409762473551 0.07481343524311536 -1.5563673957329998 0.03699770513985778 1.1017726458742987</pose> 
+        <mass>0.1339093160797401</mass>
+        <inertia>
+          <ixx>0.0005280375972533162</ixx>
+          <ixy>-3.783752530288604e-20</ixy>
+          <ixz>-8.764549604028535e-21</ixz>
+          <iyy>0.0003384198608180212</iyy>
+          <iyz>2.6807174432691894e-21</iyz>
+          <izz>0.0002594291848749345</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nutrigrain_harvest_blueberry_bliss/nutrigrain_harvest_blueberry_bliss_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nutrigrain_harvest_blueberry_bliss/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nutrigrain_harvest_blueberry_bliss/nutrigrain_harvest_blueberry_bliss.material</uri>
+            <name>nutrigrain_harvest_blueberry_bliss</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

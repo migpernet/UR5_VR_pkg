@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="vo5_split_ends_anti_breakage_shampoo">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.003864852044641946 0.0012038338090859019 0.09944814162906492 3.13746140475232 0.0006893231346864312 -3.096281716093838</pose> 
+        <mass>0.04491231205716598</mass>
+        <inertia>
+          <ixx>0.00014759666897685118</ixx>
+          <ixy>3.906244675361201e-21</ixy>
+          <ixz>-4.1788035618149406e-22</ixz>
+          <iyy>0.00014052611115094715</iyy>
+          <iyz>8.655064702018946e-21</iyz>
+          <izz>1.812827620364375e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///vo5_split_ends_anti_breakage_shampoo/vo5_split_ends_anti_breakage_shampoo_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///vo5_split_ends_anti_breakage_shampoo/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///vo5_split_ends_anti_breakage_shampoo/vo5_split_ends_anti_breakage_shampoo.material</uri>
+            <name>vo5_split_ends_anti_breakage_shampoo</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

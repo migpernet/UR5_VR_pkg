@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nutrigrain_strawberry">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.01125225173129584 -0.002451320355566048 0.07442924615331162 -1.5897304970021138 -0.008208985964946836 1.0113227570845573</pose> 
+        <mass>0.13193830496769776</mass>
+        <inertia>
+          <ixx>0.0006444375303314546</ixx>
+          <ixy>-1.4780607443686215e-20</ixy>
+          <ixz>-1.0466981082554694e-19</ixz>
+          <iyy>0.0004492979896655567</iyy>
+          <iyz>-4.888222360835308e-21</iyz>
+          <izz>0.0002429828507172094</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nutrigrain_strawberry/nutrigrain_strawberry_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nutrigrain_strawberry/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nutrigrain_strawberry/nutrigrain_strawberry.material</uri>
+            <name>nutrigrain_strawberry</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

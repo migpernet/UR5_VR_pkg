@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="motts_original_assorted_fruit">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0053533913725563355 0.0075067528789185285 0.09292791947452193 -3.1296440098908835 0.012044450983173867 -2.320492838370119</pose> 
+        <mass>0.15113951936694536</mass>
+        <inertia>
+          <ixx>0.0006900934764262761</ixx>
+          <ixy>-9.753908656562559e-20</ixy>
+          <ixz>8.4121050874851535e-22</ixz>
+          <iyy>0.00044017588181220936</iyy>
+          <iyz>3.478044032494923e-20</iyz>
+          <izz>0.000326161710245764</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///motts_original_assorted_fruit/motts_original_assorted_fruit_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///motts_original_assorted_fruit/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///motts_original_assorted_fruit/motts_original_assorted_fruit.material</uri>
+            <name>motts_original_assorted_fruit</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

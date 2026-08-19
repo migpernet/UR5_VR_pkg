@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="vo5_tea_therapy_healthful_green_tea_smoothing_shampoo">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.003154458255397068 0.0005107195973028858 0.10060602466248283 -3.140176546722504 0.025731361531502177 -0.08019021715131812</pose> 
+        <mass>0.05226116082687432</mass>
+        <inertia>
+          <ixx>0.00018233611930891587</ixx>
+          <ixy>-2.16056684512855e-21</ixy>
+          <ixz>-1.3839964897612314e-20</ixz>
+          <iyy>0.00017231459910366313</iyy>
+          <iyz>-3.193804637439888e-20</iyz>
+          <izz>2.43414055574935e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///vo5_tea_therapy_healthful_green_tea_smoothing_shampoo/vo5_tea_therapy_healthful_green_tea_smoothing_shampoo_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///vo5_tea_therapy_healthful_green_tea_smoothing_shampoo/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///vo5_tea_therapy_healthful_green_tea_smoothing_shampoo/vo5_tea_therapy_healthful_green_tea_smoothing_shampoo.material</uri>
+            <name>vo5_tea_therapy_healthful_green_tea_smoothing_shampoo</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="eating_right_for_healthy_living_mixed_berry">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.014689499672605475 0.0017187314666304023 0.07619202508667222 -1.581616860606161 0.014191252115451582 1.085361166851668</pose> 
+        <mass>0.13961805966367247</mass>
+        <inertia>
+          <ixx>0.0007131639294253742</ixx>
+          <ixy>-1.0415412054688513e-21</ixy>
+          <ixz>-7.723404173447949e-20</ixz>
+          <iyy>0.0004910242239902097</iyy>
+          <iyz>4.559369986579614e-22</iyz>
+          <izz>0.000273852185055205</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///eating_right_for_healthy_living_mixed_berry/eating_right_for_healthy_living_mixed_berry_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///eating_right_for_healthy_living_mixed_berry/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///eating_right_for_healthy_living_mixed_berry/eating_right_for_healthy_living_mixed_berry.material</uri>
+            <name>eating_right_for_healthy_living_mixed_berry</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

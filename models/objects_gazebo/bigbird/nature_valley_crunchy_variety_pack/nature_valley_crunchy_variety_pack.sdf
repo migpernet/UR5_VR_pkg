@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nature_valley_crunchy_variety_pack">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.002226594158089657 0.003223741134713673 0.07358099053128593 -1.5741971574104374 -0.004323825854417666 1.0063686177499467</pose> 
+        <mass>0.12994249499489008</mass>
+        <inertia>
+          <ixx>0.000503818850595667</ixx>
+          <ixy>-3.6098306528653586e-21</ixy>
+          <ixz>3.4681313804611494e-20</ixz>
+          <iyy>0.00032578571985895845</iyy>
+          <iyz>-3.289237210354813e-22</iyz>
+          <izz>0.00024391740107732501</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nature_valley_crunchy_variety_pack/nature_valley_crunchy_variety_pack_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nature_valley_crunchy_variety_pack/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nature_valley_crunchy_variety_pack/nature_valley_crunchy_variety_pack.material</uri>
+            <name>nature_valley_crunchy_variety_pack</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

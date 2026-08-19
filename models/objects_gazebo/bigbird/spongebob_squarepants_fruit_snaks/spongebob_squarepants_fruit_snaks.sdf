@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="spongebob_squarepants_fruit_snaks">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>-0.004377179149907652 -0.0147204365152445 0.09264021231525225 3.1397575661854265 0.02954721257352075 2.853600819471062</pose> 
+        <mass>0.15186604713360083</mass>
+        <inertia>
+          <ixx>0.0006947281610153412</ixx>
+          <ixy>4.690376930139573e-20</ixy>
+          <ixz>-1.9296973369823654e-21</ixz>
+          <iyy>0.0004417261448531862</iyy>
+          <iyz>3.0391699429157804e-21</iyz>
+          <izz>0.00032943681878434345</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///spongebob_squarepants_fruit_snaks/spongebob_squarepants_fruit_snaks_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///spongebob_squarepants_fruit_snaks/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///spongebob_squarepants_fruit_snaks/spongebob_squarepants_fruit_snaks.material</uri>
+            <name>spongebob_squarepants_fruit_snaks</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

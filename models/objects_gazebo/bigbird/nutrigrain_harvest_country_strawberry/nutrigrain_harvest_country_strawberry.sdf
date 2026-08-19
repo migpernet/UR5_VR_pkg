@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nutrigrain_harvest_country_strawberry">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0023762421612296184 -0.004447455592000367 0.07485682432836545 1.564856497895058 -0.028777016483100076 -2.1943471284744995</pose> 
+        <mass>0.13525743348737762</mass>
+        <inertia>
+          <ixx>0.0005425143403639176</ixx>
+          <ixy>7.91269748537951e-23</ixy>
+          <ixz>1.9260142344196202e-19</ixz>
+          <iyy>0.00035304889569659064</iyy>
+          <iyz>-2.637997213672719e-21</iyz>
+          <izz>0.0002603199783534972</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nutrigrain_harvest_country_strawberry/nutrigrain_harvest_country_strawberry_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nutrigrain_harvest_country_strawberry/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nutrigrain_harvest_country_strawberry/nutrigrain_harvest_country_strawberry.material</uri>
+            <name>nutrigrain_harvest_country_strawberry</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nutrigrain_strawberry_greek_yogurt">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.00838355905884301 -0.004087912695158365 0.07383805755475648 1.5576560752125674 -0.01017618422084993 0.704297838472514</pose> 
+        <mass>0.1391845024865744</mass>
+        <inertia>
+          <ixx>0.0006907687026804131</ixx>
+          <ixy>-1.1434386286322948e-21</ixy>
+          <ixz>1.71456159343242e-19</ixz>
+          <iyy>0.0004913796890973605</iyy>
+          <iyz>2.091409226696265e-21</iyz>
+          <izz>0.00025481633746528905</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nutrigrain_strawberry_greek_yogurt/nutrigrain_strawberry_greek_yogurt_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nutrigrain_strawberry_greek_yogurt/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nutrigrain_strawberry_greek_yogurt/nutrigrain_strawberry_greek_yogurt.material</uri>
+            <name>nutrigrain_strawberry_greek_yogurt</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

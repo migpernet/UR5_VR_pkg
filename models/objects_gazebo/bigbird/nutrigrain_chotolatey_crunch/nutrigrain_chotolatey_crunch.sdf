@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nutrigrain_chotolatey_crunch">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0048976579004125186 0.0060457719550233175 0.07509001867925873 1.5669390895952653 -0.009373412159962406 -2.228505939278299</pose> 
+        <mass>0.1332628862667601</mass>
+        <inertia>
+          <ixx>0.0005327498931675088</ixx>
+          <ixy>-2.23272231526953e-21</ixy>
+          <ixz>-1.0459662173912757e-21</ixz>
+          <iyy>0.0003441024773212619</iyy>
+          <iyz>1.4539317107284467e-21</iyz>
+          <izz>0.00025659797568985216</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nutrigrain_chotolatey_crunch/nutrigrain_chotolatey_crunch_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nutrigrain_chotolatey_crunch/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nutrigrain_chotolatey_crunch/nutrigrain_chotolatey_crunch.material</uri>
+            <name>nutrigrain_chotolatey_crunch</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

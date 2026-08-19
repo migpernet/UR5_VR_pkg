@@ -1,0 +1,103 @@
+O Fluxo de Execução Resumido para os Ensaios
+
+1-Inicie o ROS e os controladores.
+
+2-Inicializar o nó Para cálculo da latência (latency_echo_140.py)
+
+3-Inicie a gravação com o rosbag record no terminal (Linhas de comando estão abaixo).
+
+rosbag record -O ensaio_grasping_0.bag \
+/ur5/joint_states \
+/ur5/planned_trajectory \
+/ur5/eff_joint_traj_controller/command \
+/ggcnn/target_intention_point \
+/ggcnn/unity_target_pose \
+/ggcnn/img/grasp \
+/points_fixed_to_base \
+/tf /tf_static
+
+Dica: Altere o sufixo do nome do arquivo (ex: ensaio_objeto_cilindro_01.bag) a cada mudança de peça para facilitar a identificação posterior.
+
+4-Dê o Play no Unity (o CSV começará a ser gerado com um nome único).
+
+5-O operador seleciona o objeto, aciona a visão ativa e autoriza a garra fantasma.
+
+6-Quando o robô voltar e terminar o ciclo, pare o rosbag (Ctrl+C) e dê Stop no Unity.
+
+7-No Windows rode o script "analise_csv.py" no visual studio code. (Não esquecer de alterar o arquivo .csv)
+
+8-No Windows rode o script plotar_latency.py" no visual studio code para gerar o gráfico. (Não esquecer de alterar o arquivo .csv)
+
+8-No Ubuntu rode o script "analise_rosbag.py" no visual studio code. (Não esquecer de alterar o arquivo .bag).
+
+9-No Ububtu, na pasta "resultados_ensaio" vai estar alguns gráficos.
+
+10-Repita para o próximo objeto da bancada.
+
+
+***********************************************************
+
+rosbag info ensaio_grasping.bag
+
+--> comandos para descobrir a resolução aodtada pela câmera Intel RealSense
+
+# Para verificar a largura (width) do frame de profundidade
+rostopic echo -n 1 /camera/depth/image_raw/width
+
+# Para verificar a altura (height) do frame de profundidade
+rostopic echo -n 1 /camera/depth/image_raw/height
+
+
+***********************************************************
+
+1. Inicialização do Ambiente Escravo (Ubuntu / ROS)
+
+**********************************************************
+
+2. Acionamento da Gravação de Logs (ROS)
+
+rosbag record -O ensaio_grasping_0.bag \
+/ur5/joint_states \
+/ur5/planned_trajectory \
+/ur5/eff_joint_traj_controller/command \
+/ggcnn/target_intention_point \
+/ggcnn/unity_target_pose \
+/ggcnn/img/grasp \
+/points_fixed_to_base \
+/tf /tf_static
+
+Dica: Altere o sufixo do nome do arquivo (ex: ensaio_objeto_cilindro_01.bag) a cada mudança de peça para facilitar a identificação posterior.
+
+***********************************************************
+
+3. Inicialização do Sistema Mestre (Windows / Unity)
+Com o headset devidamente conectado à estação, inicie a simulação no Unity pressionando o botão Play.
+
+Certifique-se de que o componente DataLogger está configurado com a gravação ativa para que o arquivo CSV com carimbo de data/hora seja gerado na pasta do projeto.
+
+***********************************************************
+
+4. Execução do Ciclo de Autonomia Compartilhada
+Ativação: Pressione o botão Start no painel virtual para liberar a movimentação e habilitar o sistema.
+
+Seleção do Alvo: Utilize o indicador da mão direita para realizar o raycasting sobre o objeto desejado e confirme a escolha executando o gesto de Left Thumbs-Up com a mão esquerda.
+
+Inspeção e Validação: Observe o robô executar o reposicionamento por Visão Ativa e a projeção da Ghost Gripper. Estando a pose correta, execute o gesto bimanual Double Thumbs-Up para autorizar a preensão.
+
+Conclusão: Acompanhe a execução autônoma da preensão e o retorno automático do controle de movimento para o operador.
+
+***********************************************************
+
+5. Encerramento e Organização dos Dados
+Assim que o ciclo se encerrar e o controle for devolvido, finalize a gravação do rosbag no terminal do Ubuntu utilizando o comando Ctrl + C.
+
+No editor do Unity, interrompa o modo Play para salvar e fechar o arquivo .csv gerado pelo DataLogger.
+
+Agrupe o arquivo .bag e o .csv correspondentes àquela tentativa em uma pasta de backup específica.
+
+
+
+
+
+
+

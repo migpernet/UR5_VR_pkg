@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="krylon_low_odor_clear_finish">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.009751142822902058 0.007329595362351387 0.09814852818779038 -3.1360676961765472 -0.0014978122571822875 -2.9447732877250368</pose> 
+        <mass>0.0744533500547743</mass>
+        <inertia>
+          <ixx>0.0002489524800309209</ixx>
+          <ixy>5.132000016280943e-20</ixy>
+          <ixz>3.326413238351092e-21</ixz>
+          <iyy>0.0002472809948286972</iyy>
+          <iyz>-1.1440688538469762e-20</iyz>
+          <izz>4.60463220153078e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///krylon_low_odor_clear_finish/krylon_low_odor_clear_finish_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///krylon_low_odor_clear_finish/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///krylon_low_odor_clear_finish/krylon_low_odor_clear_finish.material</uri>
+            <name>krylon_low_odor_clear_finish</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

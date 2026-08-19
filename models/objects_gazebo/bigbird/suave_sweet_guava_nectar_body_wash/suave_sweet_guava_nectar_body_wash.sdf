@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="suave_sweet_guava_nectar_body_wash">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.006483597067130071 -0.00506054745110456 0.10315182797072935 -3.1415394111120056 0.002940219235359369 -2.888212209699006</pose> 
+        <mass>0.05270228161972665</mass>
+        <inertia>
+          <ixx>0.0001982693481140818</ixx>
+          <ixy>1.537153738528384e-20</ixy>
+          <ixz>-1.2218512662173975e-21</ixz>
+          <iyy>0.0001881504291468228</iyy>
+          <iyz>5.090983067735382e-21</iyz>
+          <izz>2.395225027241932e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///suave_sweet_guava_nectar_body_wash/suave_sweet_guava_nectar_body_wash_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///suave_sweet_guava_nectar_body_wash/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///suave_sweet_guava_nectar_body_wash/suave_sweet_guava_nectar_body_wash.material</uri>
+            <name>suave_sweet_guava_nectar_body_wash</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

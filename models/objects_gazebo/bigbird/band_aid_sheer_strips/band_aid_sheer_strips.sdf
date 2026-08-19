@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="band_aid_sheer_strips">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.007160877226341851 -0.005513237960493619 0.05256480059420958 -0.02513085394676984 0.045619593666573935 -3.0834685056173665</pose> 
+        <mass>0.03946361469719523</mass>
+        <inertia>
+          <ixx>5.0587310847959835e-05</ixx>
+          <ixy>1.6765625195826279e-21</ixy>
+          <ixz>-4.4776608545093635e-22</ixz>
+          <iyy>4.057827973222988e-05</iyy>
+          <iyz>-4.346700266914121e-21</iyz>
+          <izz>2.7678723801457197e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///band_aid_sheer_strips/band_aid_sheer_strips_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///band_aid_sheer_strips/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///band_aid_sheer_strips/band_aid_sheer_strips.material</uri>
+            <name>band_aid_sheer_strips</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="paper_cup_holder">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.005466801780345994 -0.010525090032955025 0.03220617896594689 2.7803116771979264 1.5620408928073917 -1.897148012580673</pose> 
+        <mass>0.19932848143022797</mass>
+        <inertia>
+          <ixx>0.0013970113705709432</ixx>
+          <ixy>-5.546917196505778e-20</ixy>
+          <ixz>-7.311883609729871e-20</ixz>
+          <iyy>0.0007350670603722973</iyy>
+          <iyz>8.191136228529116e-21</iyz>
+          <izz>0.0007310616902578992</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///paper_cup_holder/paper_cup_holder_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///paper_cup_holder/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///paper_cup_holder/paper_cup_holder.material</uri>
+            <name>paper_cup_holder</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

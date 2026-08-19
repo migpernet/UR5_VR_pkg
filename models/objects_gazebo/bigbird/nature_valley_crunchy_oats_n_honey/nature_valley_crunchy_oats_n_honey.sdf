@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="nature_valley_crunchy_oats_n_honey">
+    <static>false</static>
+    <link name="link">
+      <inertial>       
+        <pose>0.0030477248477339828 -0.006896382545648017 0.07375586749672178 1.574475394150135 -0.010509597999814246 2.766118140255856</pose> 
+        <mass>0.12776431081454825</mass>
+        <inertia>
+          <ixx>0.0004947877011713555</ixx>
+          <ixy>6.064450550638957e-22</ixy>
+          <ixz>1.3234437585972534e-20</ixz>
+          <iyy>0.000319540974169887</iyy>
+          <iyz>1.3267482650522759e-20</iyz>
+          <izz>0.0002389873395622526</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Use a downsampled mesh for collisions -->
+            <uri>model:///nature_valley_crunchy_oats_n_honey/nature_valley_crunchy_oats_n_honey_250_collision.obj</uri>
+	        </mesh>
+        </geometry>
+        <surface>
+        <!--<friction>
+          <ode>
+            <mu>0.8</mu>
+            <mu2>0.6</mu2>
+          </ode>
+        </friction>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model:///nature_valley_crunchy_oats_n_honey/optimized_tsdf_texture_mapped_mesh.obj</uri>
+	        </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model:///nature_valley_crunchy_oats_n_honey/nature_valley_crunchy_oats_n_honey.material</uri>
+            <name>nature_valley_crunchy_oats_n_honey</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
