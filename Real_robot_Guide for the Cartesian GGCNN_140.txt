@@ -1,0 +1,153 @@
+GUIA DE IMPLEMENTAÇÃO PARA O ROBÔ REAL
+
+**************************************************************************************
+==========================================================================================
+= A - PRIMEIRA PARTE:
+==========================================================================================
+
+1 - Braço UR5: Estabelece a ponte TCP primária com o painel do robô.
+
+--> roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.3
+
+2 - Garra Robotiq: Libera a permissão da porta USB e inicia a comunicação hexadecimal.
+
+--> sudo chmod 777 /dev/ttyUSB0 && rosrun robotiq_2f_gripper_control Robotiq2FGripperRtuNode.py /dev/ttyUSB0
+
+3 - Intel RealSense: Aciona a câmera emitindo a nuvem de pontos bruta.
+
+--> roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
+
+4 - Filtros Espaciais: Roda o script isolado para fatiar a nuvem de pontos.
+
+--> roslaunch UR5_VR_pkg filtros_visao.launch
+
+5 - (OPÇÃO)- Cinemática MoveIt: Ativa o solucionador de trajetórias anti-colisão.
+
+--> roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch
+
+--------------------------------------------------------------------------------------
+
+DE FORMA OPCIONAL, PODE-SE LANÇAR A PRIMEIRA PARTE DE UMA ÚNICA VEZ APENAS RODANDO O ARQUIVO .launch abaixo:
+
+--> roslaunch UR5_VR_pkg real_ur5_gripper_140_cam_noRViz.launch       (Sem RViz)
+
+                                ou
+
+--> roslaunch UR5_VR_pkg real_ur5_gripper_140_cam_RViz.launch       (Com RViz)
+
+**************************************************************************************
+==========================================================================================
+= B - SEGUNDA PARTE:
+==========================================================================================
+
+1 - Ponte VR e Autonomia: Acorda o conector do Unity e os seus nós em Python.
+
+--> roslaunch ros_tcp_endpoint endpoint.launch
+
+**************************************************************************************
+==========================================================================================
+= C - TERCEIRA PARTE
+==========================================================================================
+
+1 - Rodar o script do GGCNN
+
+--> rosrun UR5_VR_pkg real_robot_run_ggcnn_teleoperation_140.py
+
+2 - Rodar o nó responsável por ajustar o RGB para BGR
+
+--> rosrun UR5_VR_pkg fix_colors_ggcnn_140.py
+
+3 - Resolver a cinemática inversa com o KDL/DLS
+
+--> rosrun UR5_VR_pkg real_robot_kdl_teleop_solver_DLS_140.py
+
+4 - Rodar o planejador de trajetórias (Polinômio quíntuplo)
+
+--> rosrun UR5_VR_pkg real_robot_quintic_planner_node_140.py
+
+5 - Rodar o nó responsável pelo comando das juntas do robô
+
+--> rosrun UR5_VR_pkg real_robot_commander_node_140.py
+
+6 - Lançar a webCam externa
+
+--> rosrun usb_cam usb_cam_node _video_device:="/dev/video2" _pixel_format:=yuyv
+
+**************************************************************************************
+==========================================================================================
+= D - TEXTES 
+==========================================================================================
+
+================================
+= D.A - TERMINAL DO LADO DO ROS
+================================
+
+1 - Para fazer o teste de Latência
+rosrun UR5_VR_pkg latency_echo_140.py
+
+2 - Inicie a gravação com o rosbag record no terminal (Linhas de comando estão abaixo).
+
+rosbag record -O ensaio_grasping_0.bag \
+/ur5/joint_states \
+/ur5/planned_trajectory \
+/ur5/eff_joint_traj_controller/command \
+/ggcnn/target_intention_point \
+/ggcnn/unity_target_pose \
+/ggcnn/img/grasp \
+/points_fixed_to_base \
+/tf /tf_static
+
+OBS: Altere a numeração do ensaio: ensaio_grasping_0.bag, ensaio_grasping1.bag etc
+     Abra o terminal na pasta "ENSAIO GRASP" em "UR5_VR_pkg/scripts/UR5_VR_pkg"
+     Ao terminar o teste, encerre esta gravação com "CTRL+C"
+
+3 - Rodar o script analise_rosbag.py via terminal ou no "visual code'  (Será retornado arquivos .txt e gráficos na pasta "resultados_ensaio")
+
+--> rosrun UR5_VR_pkg analise_rosbag.py
+
+OBS: Alterar o nome do arqvo gravado no rosbag conforme ordem de numeração utilizada.
+
+==================================
+= D.B - VISUAL CODE DO LADO DO UNITY
+==================================
+
+1 - Rodar o script analise_csv.py via terminal ou no "visual code'  (Este script está "UR5_Teleoperation_VR_Hand_GGCNN_2/Assets/ENSAIOS/Scripts")
+OBS: Será gerado um arquivo com uma numeração de controle do ensaio na pasta "Testes", dentro da pasta ENSAIOS. 
+
+2 - Rodar o script plotar_latencia.py via terminal ou no "visual code'   (Este script está "UR5_Teleoperation_VR_Hand_GGCNN_2/Assets/ENSAIOS/Scripts")
+OBS: Altere a numeração de controle do arquivo. 
+     Será criado gráfico de latência, gravado na pasta "Gráficos", dentro da pasta ENSAIOS. 
+
+
+
+
+==========================================================================================
+==========================================================================================
+
+
+
+
+
+--> comandos para descobrir a resolução adotada pela câmera Intel RealSense
+
+# Para verificar a largura (width) do frame de profundidade
+rostopic echo -n 1 /camera/depth/image_raw/width
+
+# Para verificar a altura (height) do frame de profundidade
+rostopic echo -n 1 /camera/depth/image_raw/height
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

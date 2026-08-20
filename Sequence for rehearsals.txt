@@ -39,7 +39,7 @@ Dica: Altere o sufixo do nome do arquivo (ex: ensaio_objeto_cilindro_01.bag) a c
 
 rosbag info ensaio_grasping.bag
 
---> comandos para descobrir a resolução aodtada pela câmera Intel RealSense
+--> comandos para descobrir a resolução adotada pela câmera Intel RealSense
 
 # Para verificar a largura (width) do frame de profundidade
 rostopic echo -n 1 /camera/depth/image_raw/width

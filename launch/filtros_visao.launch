@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- PASSO 1: VoxelGrid -->
+    <node pkg="nodelet" type="nodelet" name="voxel_grid_filter" args="standalone pcl/VoxelGrid" output="screen">
+        <remap from="~input" to="/camera/depth/color/points" />
+        <remap from="~output" to="/points_voxelized_temp" />
+        <param name="leaf_size" value="0.005" />
+        <param name="output_frame" value="base_link" />
+    </node>
+
+    <!-- PASSO 2: PassThrough Filter -->
+    <node pkg="nodelet" type="nodelet" name="passthrough_z" args="standalone pcl/PassThrough" output="screen">
+        <remap from="~input" to="/points_voxelized_temp" />
+        <remap from="~output" to="/points_fixed_to_base" />
+        <param name="filter_field_name" value="z" />
+        <param name="filter_limit_min" value="0.005" />
+        <param name="filter_limit_max" value="0.40" />
+        <param name="filter_limit_negative" value="false" />
+    </node>
+</launch>
