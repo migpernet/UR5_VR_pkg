@@ -1,0 +1,60 @@
+CONFIGURAR A CÂMERA intel RealSense D435
+
+PASSO 1 - Atualizar o sistema e instalar dependências
+--> sudo apt-get update
+--> sudo apt-get upgrade
+--> sudo apt-get install git libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev cmake build-essential
+
+PASSO 2: Clonar e compilar o librealsense
+ETAPA 2A: Clone o repositório oficial:
+--> git clone https://github.com/IntelRealSense/librealsense.git
+--> cd librealsense
+
+ETAPA 2B: Crie a pasta de compilação e configure o CMake:
+--> mkdir build && cd build
+--> cmake ../ -DFORCE_RSUSB_BACKEND=true -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=true
+
+ETAPA 2C: Compile e instale as ferramentas:
+--> sudo make uninstall
+--> make -j$(nproc)
+--> sudo make install
+
+PASSO 3: Configurar as regras Udev (Permissões USB)
+Ainda dentro da pasta raiz do repositório librealsense (ou executando o comando a partir dela), rode:
+--> cd .. # Certifique-se de estar na raiz do repositório librealsense
+--> sudo cp config/99-realsense-libusb.rules /etc/udev/rules.d/
+--> sudo udevadm control --reload-rules && sudo udevadm trigger
+
+PASSO 4: Conectar e Testar a Câmera
+Conecte a câmera RealSense D435 a uma porta USB 3.0 (geralmente indicada pela cor azul) do seu computador usando um cabo compatível. Evite usar hubs USB passivos.
+No terminal, execute a ferramenta visual oficial:
+--> realsense-viewer
+
+O painel gráfico deverá abrir. Nele, você poderá ativar os módulos Stereo Module (para ver o mapa de profundidade/depth) e RGB Camera (para ver a imagem colorida), além de alternar para a visualização em nuvem de pontos 3D (2D/3D).
+
+
+
+
+******************************************************************************************
+
+INSTALAÇÃO DA CÂMERA USB NO COMPUTADOR UBUNTU 20.04 NOETIC
+
+PASSO 1 - Instalar o pacote usb_cam
+--> sudo apt update
+--> sudo apt install ros-noetic-usb-cam
+
+PASSO 2 - dentificar a porta de vídeo correta
+--> ls -l /dev/video*
+
+Dica: Para ter certeza de qual porta pertence a qual câmera, instale o v4l-utils (sudo apt install v4l-utils) e rode v4l2-ctl --list-devices para ver os nomes.
+
+PASSO 3 - Iniciar o ROS Master
+roscore
+
+PASSO 4 - Executar o nó da câmera
+--> rosrun usb_cam usb_cam_node _video_device:="/dev/video0" _pixel_format:=yuyv
+
+PASSO 5 - Visualizar o stream da câmera
+--> rosrun rqt_image_view rqt_image_view
+
+Selecione o tópico /usb_cam/image_raw na aba superior da janela que será aberta.
