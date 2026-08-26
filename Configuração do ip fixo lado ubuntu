@@ -1,0 +1,22 @@
+1. Configurando o Ubuntu (Máquina do ROS)
+Abra o terminal no Ubuntu e copie e cole este bloco de comandos. Vamos usar o IP 192.168.13.40.
+
+# Modifica a configuração da rede Wi-Fi para IP Fixo (Manual)
+sudo nmcli connection modify "LaR_Robots" \
+ipv4.method manual \
+ipv4.addresses 192.168.13.40/24 \
+ipv4.gateway 192.168.13.1 \
+ipv4.dns "8.8.8.8 1.1.1.1" \
+connection.autoconnect yes
+
+# Reinicia a conexão para aplicar as mudanças imediatamente
+sudo nmcli connection down "LaR_Robots"
+sudo nmcli connection up "LaR_Robots"
+
+# Verifica se o IP foi aplicado corretamente
+ip addr show
+
+
+
+
+Procure pela placa Wi-Fi (wlp...) no resultado e confirme se o IP 192.168.13.40 aparece lá.
