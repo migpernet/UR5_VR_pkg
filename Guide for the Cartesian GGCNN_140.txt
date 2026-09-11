@@ -47,3 +47,46 @@ rosrun usb_cam usb_cam_node _video_device:="/dev/video2" _pixel_format:=yuyv
 
 
 
+
+
+*****************************
+lar-desktop-ur5@lardesktopur5-MS-7D22:~/ur5_ws$ rostopic list | grep follow_joint_trajectory
+
+/follow_joint_trajectory/cancel
+/follow_joint_trajectory/feedback
+/follow_joint_trajectory/goal
+/follow_joint_trajectory/result
+/follow_joint_trajectory/status
+
+
+**********
+/ur5/eff_joint_traj_controller/follow_joint_trajectory/cancel
+/ur5/eff_joint_traj_controller/follow_joint_trajectory/feedback
+/ur5/eff_joint_traj_controller/follow_joint_trajectory/goal
+/ur5/eff_joint_traj_controller/follow_joint_trajectory/result
+/ur5/eff_joint_traj_controller/follow_joint_trajectory/status
+
+/ur5/gripper_controller/follow_joint_trajectory/cancel
+/ur5/gripper_controller/follow_joint_trajectory/feedback
+/ur5/gripper_controller/follow_joint_trajectory/goal
+/ur5/gripper_controller/follow_joint_trajectory/result
+/ur5/gripper_controller/follow_joint_trajectory
+
+
+**********
+Em seguinda rodei o script e foi retornado a seguinte no terminal:
+
+lar-desktop-ur5@lardesktopur5-MS-7D22:~/ur5_ws$ rostopic list | grep follow_joint_trajectory
+
+/follow_joint_trajectory/cancel
+/follow_joint_trajectory/feedback
+/follow_joint_trajectory/goal
+/follow_joint_trajectory/result
+/follow_joint_trajectory/status
+
+/scaled_pos_joint_traj_controller/follow_joint_trajectory/cancel
+/scaled_pos_joint_traj_controller/follow_joint_trajectory/feedback
+/scaled_pos_joint_traj_controller/follow_joint_trajectory/goal
+/scaled_pos_joint_traj_controller/follow_joint_trajectory/result
+/scaled_pos_joint_traj_controller/follow_joint_trajectory/status 
+

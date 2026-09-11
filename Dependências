@@ -3,6 +3,8 @@ Pacotes vinculados:
 * O arquivo "eef_140.xacro" do urdf com pacote "robotiq_2f_140_gripper_visualization" -->  (https://github.com/ros-industrial-attic/robotiq/tree/kinetic-devel)
 
 * Os arquivos do launch com o pacote "ur_gripper_140_moveit_config"
+https://downgit.github.io/#/home?url=https://github.com/ros-industrial-attic/robotiq/tree/kinetic-devel/robotiq_2f_gripper_control/msg
+
 
 * Pacote "ROS-TCP-Endpoint"      (https://github.com/Unity-Technologies/ROS-TCP-Endpoint) --> (https://github.com/Unity-Technologies/ROS-TCP-Endpoint)
 
