@@ -1,46 +1,62 @@
 #!/usr/bin/env python3
 # Arquivo: real_robot_commander_node.py
-# Ajuste realizado em 10/09/2026, validado no gazebo
+# Ajuste: Roteamento Híbrido (VR/Autônomo) integrado com a Garra Robotiq Física
+# Ambiente: HARDWARE REAL UR5
+# Ajuste realizado em 12/09/2026, às 20:57h
+
 import rospy
 import actionlib
 from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from std_msgs.msg import Header
 
-# [ALTERAÇÃO 3]: Importando a biblioteca específica da sua garra física
+# Importando a biblioteca específica da sua garra física Robotiq
 from robotiq_2f_gripper_control.msg import Robotiq2FGripper_robot_output
 
 class RobotCommanderNode:
     def __init__(self):
         rospy.init_node('robot_commander_node')
 
-        # --- MÚSCULOS DO ROBÔ FÍSICO ---
-        # [ALTERAÇÃO 4]: Conectando ao Action Server oficial da UR5
-        action_topic = '/follow_joint_trajectory'
+        # =========================================================
+        # 1. PISTA BUROCRÁTICA (Action Server - MODO AUTÔNOMO)
+        # =========================================================
+        # Tópico padrão do ur_robot_driver para execução segura de trajetórias
+        action_topic = '/scaled_pos_joint_traj_controller/follow_joint_trajectory'
         self.arm_client = actionlib.SimpleActionClient(action_topic, FollowJointTrajectoryAction)
         
-        rospy.loginfo(f"Aguardando o Action Server do robô em: {action_topic} ...")
+        rospy.loginfo(f"Aguardando o Action Server do robô real em: {action_topic} ...")
         self.arm_client.wait_for_server()
         rospy.loginfo("Conectado! O UR5 físico autorizou o envio de comandos.")
 
-        # [ALTERAÇÃO 5]: Publicador oficial da placa da Robotiq 2F
+        # =========================================================
+        # 2. PISTA EXPRESSA (Publisher - MODO VR)
+        # =========================================================
+        # Streaming direto para evitar 'gagueira' no rastreamento contínuo
+        pub_topic = '/scaled_pos_joint_traj_controller/command'
+        self.arm_pub = rospy.Publisher(pub_topic, JointTrajectory, queue_size=1)
+
+        # =========================================================
+        # 3. GARRA FÍSICA (Robotiq)
+        # =========================================================
         self.gripper_pub = rospy.Publisher('/Robotiq2FGripperRobotOutput', Robotiq2FGripper_robot_output, queue_size=1)
 
+        # Assina o tópico unificado (KDL ou Quintic Planner enviam para cá)
         rospy.Subscriber('/ur5/planned_trajectory', JointTrajectory, self.trajectory_callback)
 
         self.arm_joints = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
                            "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
         self.gripper_joint = "finger_joint"
 
-        rospy.loginfo("Comandante Físico Iniciado. Lógica de segurança purificada.")
+        self.current_mode = "NENHUM"
+        rospy.loginfo("Comandante Físico Híbrido Iniciado! Roteamento Dinâmico Ativado.")
 
     def trajectory_callback(self, msg):
         num_points = len(msg.points)
+        if num_points == 0:
+            return
 
         arm_msg = JointTrajectory()
-        arm_msg.header = Header()
-        arm_msg.header.stamp = rospy.Time.now()
-        arm_msg.header.frame_id = "base_link"
+        # Preserva o relógio original (vital para o driver real não rejeitar o comando)
+        arm_msg.header = msg.header
         arm_msg.joint_names = self.arm_joints
 
         try:
@@ -60,7 +76,8 @@ class RobotCommanderNode:
             arm_point = JointTrajectoryPoint()
             arm_point.time_from_start = point.time_from_start
             arm_point.positions = [point.positions[i] for i in arm_indices]
-            
+
+            # Repassa velocidades e acelerações com segurança
             if point.velocities:
                 arm_point.velocities = [point.velocities[i] for i in arm_indices]
             else:
@@ -70,29 +87,50 @@ class RobotCommanderNode:
                 arm_point.accelerations = [point.accelerations[i] for i in arm_indices]
             else:
                 arm_point.accelerations = [0.0] * 6
-                
+
             arm_msg.points.append(arm_point)
 
-        # --- ENVIO PARA O BRAÇO VIA CONTRATO ---
-        goal = FollowJointTrajectoryGoal()
-        goal.trajectory = arm_msg
-        self.arm_client.send_goal(goal)
+        # =========================================================
+        # O GUARDA DE TRÂNSITO (ROTEAMENTO INTELIGENTE)
+        # =========================================================
+        if num_points > 1:
+            # MODO AUTÔNOMO: Trajetória gerada pelo Quintic Planner (Múltiplos pontos)
+            if self.current_mode != "AUTONOMO":
+                rospy.loginfo(">>> MODO AUTÔNOMO DETECTADO: Roteando via Action Server...")
+                self.current_mode = "AUTONOMO"
+            
+            goal = FollowJointTrajectoryGoal()
+            goal.trajectory = arm_msg
+            self.arm_client.send_goal(goal)
+            
+        else:
+            # MODO VR: Streaming direto da Mão (1 ponto por vez)
+            if self.current_mode != "VR":
+                rospy.loginfo(">>> MODO VR DETECTADO: Cancelando rotinas e ativando Streaming Direto...")
+                # A CEREJA DO BOLO: Freia o braço se ele estava em viagem automática
+                self.arm_client.cancel_all_goals() 
+                self.current_mode = "VR"
+                
+            self.arm_pub.publish(arm_msg)
 
-        # --- ENVIO PARA A GARRA ROBOTIQ FÍSICA ---
+        # =========================================================
+        # CONTROLE DA GARRA ROBOTIQ FÍSICA
+        # =========================================================
         if has_gripper and num_points > 0:
             final_point = msg.points[-1]
             gripper_val = final_point.positions[gripper_index]
             
-            # [ALTERAÇÃO 6]: Tradução do ângulo (radianos) para o limite de força da garra real (0 a 255)
+            # Tradução do valor (0.0 a 0.8 radianos) para o limite da placa (0 a 255 bytes)
             rpr_val = int(max(0, min(255, (gripper_val / 0.8) * 255.0)))
 
             gripper_msg = Robotiq2FGripper_robot_output()
-            gripper_msg.rACT = 1
-            gripper_msg.rGTO = 1
-            gripper_msg.rATR = 0
-            gripper_msg.rPR = rpr_val
-            gripper_msg.rSP = 150
-            gripper_msg.rFR = 150
+            gripper_msg.rACT = 1     # Ativação
+            gripper_msg.rGTO = 1     # Go-To (Executar movimento)
+            gripper_msg.rATR = 0     # Auto-Release
+            gripper_msg.rPR = rpr_val  # Position Request (Abertura real calculada)
+            gripper_msg.rSP = 150    # Velocidade (Speed)
+            gripper_msg.rFR = 150    # Força (Force)
+            
             self.gripper_pub.publish(gripper_msg)
 
 if __name__ == '__main__':
@@ -101,6 +139,124 @@ if __name__ == '__main__':
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #!/usr/bin/env python3
+# # Arquivo: real_robot_commander_node.py
+# # Ajuste realizado em 10/09/2026, validado no gazebo
+# import rospy
+# import actionlib
+# from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
+# from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+# from std_msgs.msg import Header
+
+# # [ALTERAÇÃO 3]: Importando a biblioteca específica da sua garra física
+# from robotiq_2f_gripper_control.msg import Robotiq2FGripper_robot_output
+
+# class RobotCommanderNode:
+#     def __init__(self):
+#         rospy.init_node('robot_commander_node')
+
+#         # --- MÚSCULOS DO ROBÔ FÍSICO ---
+#         # [ALTERAÇÃO 4]: Conectando ao Action Server oficial da UR5
+#         action_topic = '/follow_joint_trajectory'
+#         self.arm_client = actionlib.SimpleActionClient(action_topic, FollowJointTrajectoryAction)
+        
+#         rospy.loginfo(f"Aguardando o Action Server do robô em: {action_topic} ...")
+#         self.arm_client.wait_for_server()
+#         rospy.loginfo("Conectado! O UR5 físico autorizou o envio de comandos.")
+
+#         # [ALTERAÇÃO 5]: Publicador oficial da placa da Robotiq 2F
+#         self.gripper_pub = rospy.Publisher('/Robotiq2FGripperRobotOutput', Robotiq2FGripper_robot_output, queue_size=1)
+
+#         rospy.Subscriber('/ur5/planned_trajectory', JointTrajectory, self.trajectory_callback)
+
+#         self.arm_joints = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
+#                            "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
+#         self.gripper_joint = "finger_joint"
+
+#         rospy.loginfo("Comandante Físico Iniciado. Lógica de segurança purificada.")
+
+#     def trajectory_callback(self, msg):
+#         num_points = len(msg.points)
+
+#         arm_msg = JointTrajectory()
+#         arm_msg.header = Header()
+#         arm_msg.header.stamp = rospy.Time.now()
+#         arm_msg.header.frame_id = "base_link"
+#         arm_msg.joint_names = self.arm_joints
+
+#         try:
+#             arm_indices = [msg.joint_names.index(j) for j in self.arm_joints]
+#         except ValueError as e:
+#             rospy.logdebug(f"Aviso Commander: Mensagem ignorada pelo braço. Motivo: {e}")
+#             return
+
+#         has_gripper = False
+#         try:
+#             gripper_index = msg.joint_names.index(self.gripper_joint)
+#             has_gripper = True
+#         except ValueError:
+#             pass
+
+#         for point in msg.points:
+#             arm_point = JointTrajectoryPoint()
+#             arm_point.time_from_start = point.time_from_start
+#             arm_point.positions = [point.positions[i] for i in arm_indices]
+            
+#             if point.velocities:
+#                 arm_point.velocities = [point.velocities[i] for i in arm_indices]
+#             else:
+#                 arm_point.velocities = [0.0] * 6
+                
+#             if point.accelerations:
+#                 arm_point.accelerations = [point.accelerations[i] for i in arm_indices]
+#             else:
+#                 arm_point.accelerations = [0.0] * 6
+                
+#             arm_msg.points.append(arm_point)
+
+#         # --- ENVIO PARA O BRAÇO VIA CONTRATO ---
+#         goal = FollowJointTrajectoryGoal()
+#         goal.trajectory = arm_msg
+#         self.arm_client.send_goal(goal)
+
+#         # --- ENVIO PARA A GARRA ROBOTIQ FÍSICA ---
+#         if has_gripper and num_points > 0:
+#             final_point = msg.points[-1]
+#             gripper_val = final_point.positions[gripper_index]
+            
+#             # [ALTERAÇÃO 6]: Tradução do ângulo (radianos) para o limite de força da garra real (0 a 255)
+#             rpr_val = int(max(0, min(255, (gripper_val / 0.8) * 255.0)))
+
+#             gripper_msg = Robotiq2FGripper_robot_output()
+#             gripper_msg.rACT = 1
+#             gripper_msg.rGTO = 1
+#             gripper_msg.rATR = 0
+#             gripper_msg.rPR = rpr_val
+#             gripper_msg.rSP = 150
+#             gripper_msg.rFR = 150
+#             self.gripper_pub.publish(gripper_msg)
+
+# if __name__ == '__main__':
+#     try:
+#         RobotCommanderNode()
+#         rospy.spin()
+#     except rospy.ROSInterruptException:
+#         pass
 
 
 

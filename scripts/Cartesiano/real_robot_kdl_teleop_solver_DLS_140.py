@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-# Arquivo: real_kdl_teleop_solver_DLS.py
-# Ajuste realizado em 10/09/2026, validado no gazebo
+# Arquivo: real_unified_kdl_teleop_solver_DLS.py
+# Arquitetura: ESTRATÉGIA MISTA (Streaming Suave + Reset pelo Menu)
+# Proteções: Gesso Virtual (Elbow Up) + Anti-Singularidade (Wrist)
+# Ambiente: HARDWARE REAL UR5
+
 import rospy
 import PyKDL as kdl
 import tf_conversions.posemath as pm
@@ -15,10 +18,9 @@ import math
 # ==============================================================================
 # --- CONFIGURAÇÕES DO MODO DE TESTE ---
 # ==============================================================================
-TEST_MODE = False           
-SEND_TO_GAZEBO = True       # Mantido True para permitir o envio de comandos
-
-INPUT_AS_QUATERNION = True  
+TEST_MODE = False
+SEND_TO_GAZEBO = True  # True permite a publicação do JointTrajectory
+INPUT_AS_QUATERNION = True
 
 pos = [-0.42151787877082825, 0.031566303223371506, 0.3393116556107998]
 orient_euler = [3.14, 0.0, 0.0] 
@@ -26,9 +28,23 @@ quat_input = [0.0, 0.003392765298485756, -0.9999942183494568, 0.0]
 # ==============================================================================
 
 def resolver_salto_angular(angulo_alvo, angulo_atual):
+    """
+    Filtro Anti-Unwinding Blindado: Impede paralisia nos limites de ±360°.
+    """
+    limite_inferior = -6.28
+    limite_superior = 6.28
+    
     diferenca = angulo_alvo - angulo_atual
     menor_distancia = math.atan2(math.sin(diferenca), math.cos(diferenca))
-    return angulo_atual + menor_distancia
+    alvo_proposto = angulo_atual + menor_distancia
+    
+    while alvo_proposto > limite_superior:
+        alvo_proposto -= 2 * math.pi
+    while alvo_proposto < limite_inferior:
+        alvo_proposto += 2 * math.pi
+        
+    return alvo_proposto
+
 
 class KDLTeleopSolver:
     
@@ -36,9 +52,11 @@ class KDLTeleopSolver:
     EE_LINK = 'tool0'
     POSE_TOPIC = 'unity/target_pose'
     
+    # [ROBÔ REAL]: Tópico de comando. 
+    # (Nota: se você não usar um planejador intermediário, mude para '/scaled_pos_joint_traj_controller/command')
     COMMAND_TOPIC = '/ur5/planned_trajectory' 
     
-    # [ALTERAÇÃO 1]: O robô real publica os estados na raiz, sem o prefixo /ur5
+    # [ROBÔ REAL]: O driver da Universal Robots publica na raiz.
     JOINT_STATES_TOPIC = '/joint_states'
     
     JOINT_NAMES = [
@@ -47,7 +65,7 @@ class KDLTeleopSolver:
     ]
 
     def __init__(self):
-        rospy.loginfo("Iniciando KDL Teleop Solver Unificado (Hardware Real)...")
+        rospy.loginfo("Iniciando KDL Teleop Solver (Hardware Real | Estratégia Mista + Gesso Virtual)...")
         self.has_received_joints = False
         
         self._load_robot_model()
@@ -73,11 +91,38 @@ class KDLTeleopSolver:
 
     def _initialize_kdl_solvers(self):
         self.kdl_solver_fk = kdl.ChainFkSolverPos_recursive(self.chain)
-        self.kdl_solver_vel = kdl.ChainIkSolverVel_wdls(self.chain)
-        self.kdl_solver_vel.setLambda(1) 
         
-        self.kdl_solver_pos = kdl.ChainIkSolverPos_NR(
-            self.chain, self.kdl_solver_fk, self.kdl_solver_vel, maxiter=50, eps=1e-3
+        # Amortecimento do solver wdls para movimentos mais suaves
+        self.kdl_solver_vel = kdl.ChainIkSolverVel_wdls(self.chain)
+        self.kdl_solver_vel.setLambda(2.0) 
+        
+        # =================================================================
+        # --- O GESSO VIRTUAL (JOINT LIMITS EXTREMOS) ---
+        # =================================================================
+        self.q_min = kdl.JntArray(self.num_joints)
+        self.q_max = kdl.JntArray(self.num_joints)
+        
+        # 1. Liberdade total por padrão (±360 graus)
+        for i in range(self.num_joints):
+            self.q_min[i] = -2 * math.pi
+            self.q_max[i] =  2 * math.pi
+
+        # 2. Restrição do Ombro (Elbow Up Seguro)
+        self.q_min[1] = -2.3 
+        self.q_max[1] =  0.0
+        
+        # 3. Restrição do Cotovelo (Elbow Up Seguro)
+        self.q_min[2] = -math.pi       
+        self.q_max[2] = -0.1           
+        
+        # 4. BLINDAGEM DO PUNHO (Anti-Singularidade)
+        self.q_min[4] =  0.1
+        self.q_max[4] =  3.0
+        # =================================================================
+        
+        # Usa o solver DLS (NR_JL) que respeita os limites (Gesso Virtual)
+        self.kdl_solver_pos = kdl.ChainIkSolverPos_NR_JL(
+            self.chain, self.q_min, self.q_max, self.kdl_solver_fk, self.kdl_solver_vel, maxiter=50, eps=1e-3
         )
         
         self.q_init = kdl.JntArray(self.num_joints)
@@ -104,6 +149,10 @@ class KDLTeleopSolver:
         if not self.has_received_joints:
             return False
 
+        # =====================================================================
+        # DETECTOR DE MENU (ESTRATÉGIA MISTA)
+        # Sincroniza a memória com o hardware se o robô foi movido externamente
+        # =====================================================================
         if not self.is_first_ik:
             max_drift = 0.0
             for atual, memoria in zip(self.q_init, self.last_q_out):
@@ -112,9 +161,11 @@ class KDLTeleopSolver:
                 if drift > max_drift:
                     max_drift = drift
             
+            # Tolerância de ~11 graus antes de considerar que o menu atuou
             if max_drift > 0.2:
-                rospy.logwarn("Menu atuou! Sincronizando a memória do KDL com a nova posição.")
+                rospy.logwarn("Menu atuou! Sincronizando a memória do KDL com a posição do robô físico.")
                 self.is_first_ik = True
+        # =====================================================================
 
         target_pose_kdl = pm.fromMsg(pose_stamped_msg.pose)
         q_out = kdl.JntArray(self.num_joints)
@@ -130,10 +181,10 @@ class KDLTeleopSolver:
                 
             self.is_first_ik = False
 
+            # Painel de Log
             juntas_graus = [math.degrees(j) for j in juntas_normalizadas]
-            
             log_msg = "\n" + "="*55 + "\n"
-            log_msg += "[KDL SOLVER] Cinemática Inversa (Shortest Path)\n"
+            log_msg += "[KDL SOLVER] Robô Real | Estratégia Mista Ativa\n"
             log_msg += "="*55 + "\n"
             for nome, angulo in zip(self.JOINT_NAMES, juntas_graus):
                 log_msg += f" -> {nome}: {angulo:7.2f}°\n"
@@ -144,10 +195,10 @@ class KDLTeleopSolver:
             if SEND_TO_GAZEBO:
                 self._publish_joint_command(juntas_normalizadas)
                 
-            return True 
+            return True
 
         return False
-    
+
     def pose_callback(self, data):
         self.process_pose(data)
 
@@ -157,7 +208,13 @@ class KDLTeleopSolver:
             
         target_pose_kdl = pm.fromMsg(pose_stamped_msg.pose)
         q_out = kdl.JntArray(self.num_joints)
-        seed = self.q_init if self.is_first_ik else self.last_q_out
+        
+        # =====================================================================
+        # A CURA DO ENVENENAMENTO DE SEMENTE:
+        # Movimentos autônomos discretos usam o hardware real como base
+        # =====================================================================
+        seed = self.q_init 
+        
         result = self.kdl_solver_pos.CartToJnt(seed, target_pose_kdl, q_out)
         
         if result >= 0: 
@@ -166,7 +223,8 @@ class KDLTeleopSolver:
             for i in range(self.num_joints):
                 self.last_q_out[i] = juntas_normalizadas[i]
                 
-            self.is_first_ik = False
+            # Força o reset do VR para o próximo rastreamento da mão
+            self.is_first_ik = True
             
             js_msg = JointState()
             js_msg.name = self.JOINT_NAMES + ['finger_joint']
@@ -188,20 +246,21 @@ class KDLTeleopSolver:
         point.velocities = [0.0] * self.num_joints
         point.accelerations = [0.0] * self.num_joints
         
+        # Amortecedor Dinâmico (Evita Protective Stops no UR5)
         max_delta = 0.0
         for alvo, atual in zip(joint_positions_list, self.q_init):
             diferenca = alvo - atual
             delta_circular = abs(math.atan2(math.sin(diferenca), math.cos(diferenca)))
-            
             if delta_circular > max_delta:
                 max_delta = delta_circular
                 
         max_rad_per_sec = 2.0 
         
+        # Piso de 0.2 segundos (200ms) para dar tempo mecânico aos motores de reagirem
         tempo_dinamico = max(0.2, max_delta / max_rad_per_sec)
         
-        if tempo_dinamico > 0.15:
-            rospy.logwarn_throttle(1.0, f"[SEGURANÇA] Sincronizando Pinça. Amortecedor: {tempo_dinamico:.2f}s")
+        if tempo_dinamico > 0.25:
+            rospy.logwarn_throttle(1.0, f"[HARDWARE] Compensando salto. Amortecedor: {tempo_dinamico:.2f}s")
 
         point.time_from_start = rospy.Duration(tempo_dinamico) 
         
@@ -240,6 +299,260 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+# #!/usr/bin/env python3
+# # Arquivo: real_kdl_teleop_solver_DLS.py
+# # Ajuste realizado em 10/09/2026, validado no gazebo
+# import rospy
+# import PyKDL as kdl
+# import tf_conversions.posemath as pm
+# from kdl_parser_py.urdf import treeFromUrdfModel
+# from urdf_parser_py.urdf import URDF
+# from geometry_msgs.msg import Pose, PoseStamped
+# from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+# from std_msgs.msg import Header
+# from sensor_msgs.msg import JointState
+# import math
+
+# # ==============================================================================
+# # --- CONFIGURAÇÕES DO MODO DE TESTE ---
+# # ==============================================================================
+# TEST_MODE = False           
+# SEND_TO_GAZEBO = True       # Mantido True para permitir o envio de comandos
+
+# INPUT_AS_QUATERNION = True  
+
+# pos = [-0.42151787877082825, 0.031566303223371506, 0.3393116556107998]
+# orient_euler = [3.14, 0.0, 0.0] 
+# quat_input = [0.0, 0.003392765298485756, -0.9999942183494568, 0.0]  
+# # ==============================================================================
+
+# def resolver_salto_angular(angulo_alvo, angulo_atual):
+#     diferenca = angulo_alvo - angulo_atual
+#     menor_distancia = math.atan2(math.sin(diferenca), math.cos(diferenca))
+#     return angulo_atual + menor_distancia
+
+# class KDLTeleopSolver:
+    
+#     BASE_LINK = 'base_link'
+#     EE_LINK = 'tool0'
+#     POSE_TOPIC = 'unity/target_pose'
+    
+#     COMMAND_TOPIC = '/ur5/planned_trajectory' 
+    
+#     # [ALTERAÇÃO 1]: O robô real publica os estados na raiz, sem o prefixo /ur5
+#     JOINT_STATES_TOPIC = '/joint_states'
+    
+#     JOINT_NAMES = [
+#         'shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
+#         'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint'
+#     ]
+
+#     def __init__(self):
+#         rospy.loginfo("Iniciando KDL Teleop Solver Unificado (Hardware Real)...")
+#         self.has_received_joints = False
+        
+#         self._load_robot_model()
+#         self._initialize_kdl_solvers()
+#         self._setup_ros_communication()
+        
+#         if not TEST_MODE:
+#             rospy.loginfo("Modo ATIVO: Recebendo poses do Unity no tópico '%s'", self.POSE_TOPIC)
+
+#     def _load_robot_model(self):
+#         try:
+#             self.robot = URDF.from_parameter_server()
+#             success, kdl_tree_object = treeFromUrdfModel(self.robot)
+#             if not success:
+#                 raise Exception("Falha ao construir a árvore KDL.")
+                
+#             self.kdl_tree = kdl_tree_object
+#             self.chain = self.kdl_tree.getChain(self.BASE_LINK, self.EE_LINK)
+#             self.num_joints = self.chain.getNrOfJoints()
+#         except Exception as e:
+#             rospy.logerr("Erro ao carregar modelo URDF: %s", str(e))
+#             raise
+
+#     def _initialize_kdl_solvers(self):
+#         self.kdl_solver_fk = kdl.ChainFkSolverPos_recursive(self.chain)
+#         self.kdl_solver_vel = kdl.ChainIkSolverVel_wdls(self.chain)
+#         self.kdl_solver_vel.setLambda(1) 
+        
+#         self.kdl_solver_pos = kdl.ChainIkSolverPos_NR(
+#             self.chain, self.kdl_solver_fk, self.kdl_solver_vel, maxiter=50, eps=1e-3
+#         )
+        
+#         self.q_init = kdl.JntArray(self.num_joints)
+#         self.last_q_out = kdl.JntArray(self.num_joints)
+#         self.is_first_ik = True 
+
+#     def _setup_ros_communication(self): 
+#         self.command_pub = rospy.Publisher(self.COMMAND_TOPIC, JointTrajectory, queue_size=1)
+#         rospy.Subscriber(self.JOINT_STATES_TOPIC, JointState, self.joint_states_callback, queue_size=1)
+        
+#         if not TEST_MODE:
+#             self.pose_sub = rospy.Subscriber(self.POSE_TOPIC, PoseStamped, self.pose_callback, queue_size=1)
+#             self.quintic_pub = rospy.Publisher('/unity/target_joints', JointState, queue_size=1)
+#             rospy.Subscriber('/unity/target_pose_autonomous', PoseStamped, self.autonomous_pose_callback, queue_size=1)
+
+#     def joint_states_callback(self, msg):
+#         for i, joint_name in enumerate(self.JOINT_NAMES):
+#             if joint_name in msg.name:
+#                 idx = msg.name.index(joint_name)
+#                 self.q_init[i] = msg.position[idx]
+#         self.has_received_joints = True
+
+#     def process_pose(self, pose_stamped_msg):
+#         if not self.has_received_joints:
+#             return False
+
+#         if not self.is_first_ik:
+#             max_drift = 0.0
+#             for atual, memoria in zip(self.q_init, self.last_q_out):
+#                 dif = atual - memoria
+#                 drift = abs(math.atan2(math.sin(dif), math.cos(dif)))
+#                 if drift > max_drift:
+#                     max_drift = drift
+            
+#             if max_drift > 0.2:
+#                 rospy.logwarn("Menu atuou! Sincronizando a memória do KDL com a nova posição.")
+#                 self.is_first_ik = True
+
+#         target_pose_kdl = pm.fromMsg(pose_stamped_msg.pose)
+#         q_out = kdl.JntArray(self.num_joints)
+        
+#         seed = self.q_init if self.is_first_ik else self.last_q_out
+#         result = self.kdl_solver_pos.CartToJnt(seed, target_pose_kdl, q_out)
+        
+#         if result >= 0: 
+#             juntas_normalizadas = [resolver_salto_angular(q_out[i], seed[i]) for i in range(self.num_joints)]
+            
+#             for i in range(self.num_joints):
+#                 self.last_q_out[i] = juntas_normalizadas[i]
+                
+#             self.is_first_ik = False
+
+#             juntas_graus = [math.degrees(j) for j in juntas_normalizadas]
+            
+#             log_msg = "\n" + "="*55 + "\n"
+#             log_msg += "[KDL SOLVER] Cinemática Inversa (Shortest Path)\n"
+#             log_msg += "="*55 + "\n"
+#             for nome, angulo in zip(self.JOINT_NAMES, juntas_graus):
+#                 log_msg += f" -> {nome}: {angulo:7.2f}°\n"
+#             log_msg += "="*55
+            
+#             rospy.loginfo_throttle(0.5, log_msg)
+
+#             if SEND_TO_GAZEBO:
+#                 self._publish_joint_command(juntas_normalizadas)
+                
+#             return True 
+
+#         return False
+    
+#     def pose_callback(self, data):
+#         self.process_pose(data)
+
+#     def autonomous_pose_callback(self, pose_stamped_msg):
+#         if not self.has_received_joints:
+#             return
+            
+#         target_pose_kdl = pm.fromMsg(pose_stamped_msg.pose)
+#         q_out = kdl.JntArray(self.num_joints)
+#         seed = self.q_init if self.is_first_ik else self.last_q_out
+#         result = self.kdl_solver_pos.CartToJnt(seed, target_pose_kdl, q_out)
+        
+#         if result >= 0: 
+#             juntas_normalizadas = [resolver_salto_angular(q_out[i], seed[i]) for i in range(self.num_joints)]
+            
+#             for i in range(self.num_joints):
+#                 self.last_q_out[i] = juntas_normalizadas[i]
+                
+#             self.is_first_ik = False
+            
+#             js_msg = JointState()
+#             js_msg.name = self.JOINT_NAMES + ['finger_joint']
+#             pos_list = juntas_normalizadas
+#             pos_list.append(0.0)
+#             js_msg.position = pos_list
+#             self.quintic_pub.publish(js_msg)
+
+#     def _publish_joint_command(self, joint_positions):
+#         joint_positions_list = list(joint_positions)
+#         traj_msg = JointTrajectory()
+#         traj_msg.header = Header()
+#         traj_msg.header.stamp = rospy.Time.now()
+#         traj_msg.header.frame_id = self.BASE_LINK
+#         traj_msg.joint_names = self.JOINT_NAMES
+        
+#         point = JointTrajectoryPoint()
+#         point.positions = joint_positions_list
+#         point.velocities = [0.0] * self.num_joints
+#         point.accelerations = [0.0] * self.num_joints
+        
+#         max_delta = 0.0
+#         for alvo, atual in zip(joint_positions_list, self.q_init):
+#             diferenca = alvo - atual
+#             delta_circular = abs(math.atan2(math.sin(diferenca), math.cos(diferenca)))
+            
+#             if delta_circular > max_delta:
+#                 max_delta = delta_circular
+                
+#         max_rad_per_sec = 2.0 
+        
+#         tempo_dinamico = max(0.2, max_delta / max_rad_per_sec)
+        
+#         if tempo_dinamico > 0.15:
+#             rospy.logwarn_throttle(1.0, f"[SEGURANÇA] Sincronizando Pinça. Amortecedor: {tempo_dinamico:.2f}s")
+
+#         point.time_from_start = rospy.Duration(tempo_dinamico) 
+        
+#         traj_msg.points.append(point)
+#         self.command_pub.publish(traj_msg)
+
+# def main():
+#     rospy.init_node('kdl_teleop_solver_node', anonymous=True)
+#     solver = KDLTeleopSolver()
+    
+#     if TEST_MODE:
+#         rospy.loginfo("--- INICIANDO ROTINA DE TESTE ---")
+#         test_pose = Pose()
+#         test_pose.position.x = pos[0]
+#         test_pose.position.y = pos[1]
+#         test_pose.position.z = pos[2]
+        
+#         if INPUT_AS_QUATERNION:
+#             test_pose.orientation.x = quat_input[0]
+#             test_pose.orientation.y = quat_input[1]
+#             test_pose.orientation.z = quat_input[2]
+#             test_pose.orientation.w = quat_input[3]
+#         else:
+#             import tf.transformations
+#             quat = tf.transformations.quaternion_from_euler(orient_euler[0], orient_euler[1], orient_euler[2])
+#             test_pose.orientation.x, test_pose.orientation.y, test_pose.orientation.z, test_pose.orientation.w = quat
+        
+#         def timer_callback(event):
+#             test_stamped = PoseStamped(header=Header(frame_id=solver.BASE_LINK, stamp=rospy.Time.now()), pose=test_pose)
+#             solver.process_pose(test_stamped)
+
+#         rospy.Timer(rospy.Duration(1.0), timer_callback)
+#         rospy.spin()
+#     else:
+#         rospy.spin()
+
+# if __name__ == '__main__':
+#     main()
 
 
 

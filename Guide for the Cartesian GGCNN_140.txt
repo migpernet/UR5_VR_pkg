@@ -24,6 +24,10 @@ rosrun UR5_VR_pkg fix_colors_ggcnn_140.py
 7 - Lançar o nó no lado do ROS para receber a pose do "GhostCube" enviadas pelo Unity e resolver a cinemática inversa com o KDL/DLS
 rosrun UR5_VR_pkg kdl_teleop_solver_DLS_140.py
 
+rosrun UR5_VR_pkg trac_ik_teleop_solver_140.py
+
+rosrun UR5_VR_pkg trac_ik_teleop_solver_140_workspace_calibration.py
+
 8 - Rode o planejador de trajetórias (Polinômio quíntuplo)
 rosrun UR5_VR_pkg quintic_planner_node_140.py
 
@@ -36,7 +40,7 @@ rosrun UR5_VR_pkg latency_echo_140.py
 11 - Conectar a webCam no computador Ubuntu
 
 12 - Lançar o nó no lado do ROS para transmitir informações da webCam externa
-rosrun usb_cam usb_cam_node _video_device:="/dev/video2" _pixel_format:=yuyv 
+rosrun usb_cam usb_cam_node _video_device:="/dev/video0" _pixel_format:=yuyv 
 
 13 - Iniciar a simulação no unity apertando o "play"
 
@@ -89,4 +93,29 @@ lar-desktop-ur5@lardesktopur5-MS-7D22:~/ur5_ws$ rostopic list | grep follow_join
 /scaled_pos_joint_traj_controller/follow_joint_trajectory/goal
 /scaled_pos_joint_traj_controller/follow_joint_trajectory/result
 /scaled_pos_joint_traj_controller/follow_joint_trajectory/status 
+
+
+
+
+Nota de hardware: Lembra quando o Action Server "engasgou" e nós trocamos para um Publicador contínuo? Se tivéssemos mantido o Action Server, você estaria tentando assinar 90 contratos por segundo com o robô. A rede teria colapsado!
+
+
+Abordagem Híbrida com o Controller Manager
+
+* Para o Menu/Autônomo (Planejador Quíntuplo): Usar o Action Server. Ele garante um movimento longo suave, obedece aos 3 segundos exatos e monitora os limites de torque do braço.
+
+* Para o VR/Teleoperação: Usar o Publisher Contínuo (Streaming). Ele entrega a fluidez de latência zero que o rastreamento da mão exige.
+
+
+
+***********
+
+A limitação de velocidade/aceleleração que realmente protege o movimento precisa existir também no quintic planner ou, idealmente, no nível final do controlador.
+
+Isso é especialmente importante quando você passar de Gazebo para o UR5 físico.
+
+
+
+
+
 
