@@ -1,0 +1,10 @@
+Testes com o robô no Gazebo:
+
+rosrun UR5_VR_pkg gazebo_test_gripper.py
+
+rosrun UR5_VR_pkg gazebo_test_action_server.py
+
+rosrun UR5_VR_pkg gazebo_test_streaming_vr_90hz.py
+
+
+
